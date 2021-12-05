@@ -7,12 +7,10 @@ import kotlin.math.sign
  * @author Kris | 05/12/2021
  */
 object Day5 : Puzzle<List<Line>>(5) {
-    override fun parse(input: Sequence<String>): List<Line> = input.map { line ->
-        val (pointA, pointB) = line.split(" -> ").map { point ->
-            val (x, y) = point.split(',')
-            Point(x.toInt(), y.toInt())
-        }
-        Line(pointA, pointB)
+    private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
+    override fun parse(input: Sequence<String>): List<Line> = input.map {
+        val (x1, y1, x2, y2) = regex.find(it)?.destructured ?: error("Invalid input")
+        Line(Point(x1.toInt(), y1.toInt()), Point(x2.toInt(), y2.toInt()))
     }.toList()
 
     private fun <T> MutableMap<T, Int>.increment(key: T) = merge(key, 1, Int::plus)
