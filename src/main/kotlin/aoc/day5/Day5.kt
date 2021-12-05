@@ -9,8 +9,8 @@ import kotlin.math.sign
 object Day5 : Puzzle<List<Line>>(5) {
     private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
     override fun parse(input: Sequence<String>): List<Line> = input.map {
-        val (x1, y1, x2, y2) = regex.find(it)?.destructured ?: error("Invalid input")
-        Line(Point(x1.toInt(), y1.toInt()), Point(x2.toInt(), y2.toInt()))
+        val (x1, y1, x2, y2) = regex.find(it)?.groupValues?.drop(1)?.map(String::toInt) ?: error("Invalid input")
+        Line(Point(x1, y1), Point(x2, y2))
     }.toList()
 
     private fun <T> MutableMap<T, Int>.increment(key: T) = merge(key, 1, Int::plus)
