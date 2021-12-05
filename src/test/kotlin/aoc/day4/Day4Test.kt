@@ -39,5 +39,6 @@ internal class Day4Test {
     @Test
     fun partTwo() {
         assertEquals(1_924, Day4.solvePartTwo(Day4.parse(testInput)))
+        assertEquals(23_042, Day4.solvePartTwo(Day4.parse()))
     }
 }
