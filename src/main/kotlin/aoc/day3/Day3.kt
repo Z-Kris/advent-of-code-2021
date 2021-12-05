@@ -9,7 +9,6 @@ object Day3 : Puzzle<List<Int>>(3) {
     override fun parse(input: Sequence<String>) = input.map { it.toInt(2) }.toList()
 
     override fun solvePartOne(input: List<Int>): Long {
-        /* Calculate the number of times each bit is enabled and remove all the trailing non-existent values. */
         val counts = input.getBitCounts(input.getHighestEnabledBitIndex())
         val gamma = counts.getCommonValue { it > input.size / 2 }
         val epsilon = counts.getCommonValue { it < input.size / 2 }
