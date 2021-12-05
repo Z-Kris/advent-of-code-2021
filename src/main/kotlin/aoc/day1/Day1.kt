@@ -8,5 +8,5 @@ import aoc.Puzzle
 object Day1 : Puzzle<List<Int>>(1) {
     override fun parse(input: Sequence<String>): List<Int> = input.map(String::toInt).toList()
     override fun solvePartOne(input: List<Int>) = input.zipWithNext().count { (cur, next) -> next > cur }
-    override fun solvePartTwo(input: List<Int>) = input.windowed(size = 3).zipWithNext().count { (cur, next) -> next.sum() > cur.sum() }
+    override fun solvePartTwo(input: List<Int>) = solvePartOne(input.windowed(size = 3).map(List<Int>::sum))
 }
