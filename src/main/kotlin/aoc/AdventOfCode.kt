@@ -12,7 +12,7 @@ import kotlin.time.measureTimedValue
 private val puzzles = listOf<Puzzle<*>>(Day1, Day2, Day3)
 
 @ExperimentalTime
-fun main() = puzzles.forEach { solve(it) }
+private fun main() = puzzles.forEach { solve(it) }
 
 @ExperimentalTime
 private fun <T> solve(puzzle: Puzzle<T>) {
