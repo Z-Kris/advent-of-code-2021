@@ -1,13 +1,14 @@
 package aoc
 
 import aoc.day1.Day1
+import aoc.day2.Day2
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = listOf<Puzzle<*>>(Day1)
+private val puzzles = listOf<Puzzle<*>>(Day1, Day2)
 
 @ExperimentalTime
 fun main() = puzzles.forEach { solve(it) }
