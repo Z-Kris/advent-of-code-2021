@@ -13,7 +13,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-junit5
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.5.10")
 }
 
 tasks.test {
@@ -25,5 +26,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("aoc.AdventOfCode")
 }
