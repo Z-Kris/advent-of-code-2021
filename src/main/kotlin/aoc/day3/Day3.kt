@@ -36,7 +36,7 @@ object Day3 : Puzzle<List<Int>>(3) {
     private tailrec fun MutableList<Int>.getRating(bitIndex: Int, predicate: (remainingValues: List<Int>, value: Int) -> Boolean): Long {
         val bitValue = if (predicate(this, getBitCount(bitIndex))) 1 else 0
         removeIf { it ushr bitIndex and 0x1 != bitValue }
-        require(this.isNotEmpty()) { "No value values remaining." }
+        require(this.isNotEmpty()) { "No valid values remaining." }
         require(bitIndex >= 0) { "Out of bounds" }
         return if (size == 1) first().toLong() else getRating(bitIndex - 1, predicate)
     }
