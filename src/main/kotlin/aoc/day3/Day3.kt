@@ -29,7 +29,7 @@ object Day3 : Puzzle<List<Int>>(3) {
     }
 
     private fun List<Int>.getHighestEnabledBitIndex(): Int {
-        val highestEnabledBitValue = maxOfOrNull { it.takeHighestOneBit() } ?: error("Highest one bit does not exist.")
+        val highestEnabledBitValue = maxOfOrNull(Int::takeHighestOneBit) ?: error("Highest one bit does not exist.")
         return Int.SIZE_BITS - highestEnabledBitValue.countLeadingZeroBits() - 1
     }
 
