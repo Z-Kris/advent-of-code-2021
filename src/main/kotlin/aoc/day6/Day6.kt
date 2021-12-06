@@ -17,10 +17,9 @@ object Day6 : Puzzle<List<Int>>(6) {
     private fun LongArray.progress(days: Int): LongArray = apply { repeat(days) { advanceDay() } }
     private fun LongArray.rotate() = System.arraycopy(this, 1, this, 0, LAST_STATE)
 
-    private fun LongArray.advanceDay() {
-        val newborns = first()
+    private fun LongArray.advanceDay() = first().let { value ->
         rotate()
-        this[LAST_STATE] = newborns
-        this[INTERVAL] += newborns
+        this[LAST_STATE] = value
+        this[INTERVAL] += value
     }
 }
