@@ -13,7 +13,8 @@ object Day6 : Puzzle<List<Int>>(6) {
     override fun List<Int>.solvePartOne() = calculateProgression(80)
     override fun List<Int>.solvePartTwo() = calculateProgression(256)
 
-    private fun List<Int>.calculateProgression(days: Int): Long = LongArray(LAST_STATE + 1) { index -> count { it == index }.toLong() }.progress(days).sum()
+    private fun List<Int>.calculateProgression(days: Int): Long = LongArray(LAST_STATE + 1) { count(it) }.progress(days).sum()
+    private fun List<Int>.count(value: Int) = this@count.count { it == value }.toLong()
     private fun LongArray.progress(days: Int): LongArray = apply { repeat(days) { advanceDay() } }
     private fun LongArray.rotate() = System.arraycopy(this, 1, this, 0, LAST_STATE)
 
