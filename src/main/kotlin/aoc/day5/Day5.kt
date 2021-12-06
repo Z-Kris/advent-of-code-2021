@@ -15,10 +15,9 @@ object Day5 : Puzzle<List<Line>>(5) {
 
     private fun <T> MutableMap<T, Int>.increment(key: T) = merge(key, 1, Int::plus)
 
-    private fun List<Line>.getCountOfOverlappingPoints(threshold: Int = 2): Int {
-        val pointMap = mutableMapOf<Point, Int>()
-        forEach { line -> line.getCoveredPoints().forEach { pointMap.increment(it) } }
-        return pointMap.count { it.value >= threshold }
+    private fun List<Line>.getCountOfOverlappingPoints(threshold: Int = 2): Int = with(mutableMapOf<Point, Int>()) {
+        this@getCountOfOverlappingPoints.forEach { line -> line.getCoveredPoints().forEach { increment(it) } }
+        count { it.value >= threshold }
     }
 
     override fun solvePartOne(input: List<Line>): Int =
