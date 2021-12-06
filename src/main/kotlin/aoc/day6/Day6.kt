@@ -9,9 +9,9 @@ import aoc.Puzzle
 object Day6 : Puzzle<LongArray>(6) {
     private const val LAST_STATE = 8
     private const val INTERVAL = 6
-    override fun Sequence<String>.parse(): LongArray = single().split(',').map(String::toInt).let { longList ->
-        longList.toSet().associateWith { key -> longList.count { it == key }.toLong() }
-    }.let { LongArray(LAST_STATE + 1) { index -> it.getOrDefault(index, 0) } }
+    private fun List<Int>.toCountMap() = toSet().associateWith { key -> count { it == key }.toLong() }
+    private fun Map<Int, Long>.toCountArray() = LongArray(LAST_STATE + 1) { index -> getOrDefault(index, 0) }
+    override fun Sequence<String>.parse(): LongArray = single().split(',').map(String::toInt).toCountMap().toCountArray()
 
     override fun LongArray.solvePartOne() = calculateProgression(80)
     override fun LongArray.solvePartTwo() = calculateProgression(256)
