@@ -5,7 +5,7 @@ import aoc.Puzzle
 /**
  * @author Kris | 05/12/2021
  */
-object Day2 : Puzzle<List<String>>(2) {
+object Day2 : Puzzle<List<String>, Long>(2) {
     private val UP = Instruction("up")
     private val DOWN = Instruction("down")
     private val FORWARD = Instruction("forward")

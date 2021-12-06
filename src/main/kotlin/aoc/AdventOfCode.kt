@@ -18,7 +18,7 @@ private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6)
 private fun main() = puzzles.forEach { solve(it) }
 
 @ExperimentalTime
-private fun <T> solve(puzzle: Puzzle<T>) = with(puzzle) {
+private fun <T, R> solve(puzzle: Puzzle<T, R>) = with(puzzle) {
     val input = parse()
     val solutionPart1 = measureTimedValue {
         input.solvePartOne()

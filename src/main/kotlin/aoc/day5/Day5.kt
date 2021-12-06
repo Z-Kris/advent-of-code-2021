@@ -6,7 +6,7 @@ import kotlin.math.sign
 /**
  * @author Kris | 05/12/2021
  */
-object Day5 : Puzzle<List<Line>>(5) {
+object Day5 : Puzzle<List<Line>, Int>(5) {
     private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
     override fun Sequence<String>.parse(): List<Line> = map {
         val (x1, y1, x2, y2) = regex.find(it)?.destructured?.toList()?.map(String::toInt) ?: error("Invalid input")

@@ -5,7 +5,7 @@ import aoc.Puzzle
 /**
  * @author Kris | 05/12/2021
  */
-object Day3 : Puzzle<List<Int>>(3) {
+object Day3 : Puzzle<List<Int>, Long>(3) {
     override fun Sequence<String>.parse() = map { it.toInt(2) }.toList()
 
     override fun List<Int>.solvePartOne(): Long {

@@ -6,7 +6,7 @@ import aoc.Puzzle
  * @author Kris | 06/12/2021
  */
 @Suppress("NOTHING_TO_INLINE")
-object Day6 : Puzzle<LongArray>(6) {
+object Day6 : Puzzle<LongArray, Long>(6) {
     private const val LAST_STATE = 8
     private const val INTERVAL = 6
     private fun List<Int>.toCountMap() = toSet().associateWith { key -> count { it == key }.toLong() }

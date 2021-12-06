@@ -5,7 +5,7 @@ import aoc.Puzzle
 /**
  * @author Kris | 05/12/2021
  */
-object Day4 : Puzzle<Bingo>(4) {
+object Day4 : Puzzle<Bingo, Long>(4) {
     private const val DIMENSION = 5
     private val range = 0 until DIMENSION
     private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
