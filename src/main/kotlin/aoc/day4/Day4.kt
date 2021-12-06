@@ -8,10 +8,12 @@ import aoc.Puzzle
 object Day4 : Puzzle<Bingo>(4) {
     private const val DIMENSION = 5
     private val range = 0 until DIMENSION
-    override fun parse(input: Sequence<String>): Bingo = with(input.toList()) {
-        val winningNumbers = first().split(',').map(String::toInt)
-        val bingoBoards = drop(1).toMutableList().apply { removeIf(String::isEmpty) }.chunked(DIMENSION)
-            .map { line -> line.flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("\\s+")).map(String::toInt) }.map(::BingoBoard)
+    private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
+    private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("\\s+")).map(String::toInt)
+
+    override fun parse(input: Sequence<String>): Bingo = with(input.toMutableList().apply { removeIf(String::isEmpty) }) {
+        val winningNumbers = removeFirst().split(',').map(String::toInt)
+        val bingoBoards = chunked(DIMENSION).getBingoBoards()
         Bingo(winningNumbers, bingoBoards)
     }
 
