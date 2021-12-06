@@ -5,20 +5,22 @@ import aoc.Puzzle
 /**
  * @author Kris | 06/12/2021
  */
-object Day6 : Puzzle<List<Int>>(6) {
+@Suppress("NOTHING_TO_INLINE")
+object Day6 : Puzzle<LongArray>(6) {
     private const val LAST_STATE = 8
     private const val INTERVAL = 6
-    override fun Sequence<String>.parse(): List<Int> = single().split(',').map(String::toInt)
+    override fun Sequence<String>.parse(): LongArray = single().split(',').map(String::toInt).let { longList ->
+        longList.toSet().associateWith { key -> longList.count { it == key }.toLong() }
+    }.let { LongArray(LAST_STATE + 1) { index -> it.getOrDefault(index, 0) } }
 
-    override fun List<Int>.solvePartOne() = calculateProgression(80)
-    override fun List<Int>.solvePartTwo() = calculateProgression(256)
+    override fun LongArray.solvePartOne() = calculateProgression(80)
+    override fun LongArray.solvePartTwo() = calculateProgression(256)
 
-    private fun List<Int>.calculateProgression(days: Int): Long = LongArray(LAST_STATE + 1) { count(it) }.progress(days).sum()
-    private fun List<Int>.count(value: Int) = this@count.count { it == value }.toLong()
-    private fun LongArray.progress(days: Int): LongArray = apply { repeat(days) { advanceDay() } }
-    private fun LongArray.rotate() = System.arraycopy(this, 1, this, 0, LAST_STATE)
+    private inline fun LongArray.calculateProgression(days: Int): Long = progress(days).sum()
+    private inline fun LongArray.progress(days: Int): LongArray = apply { repeat(days) { advanceDay() } }
+    private inline fun LongArray.rotate() = System.arraycopy(this, 1, this, 0, LAST_STATE)
 
-    private fun LongArray.advanceDay() = first().let { value ->
+    private inline fun LongArray.advanceDay() = first().let { value ->
         rotate()
         this[LAST_STATE] = value
         this[INTERVAL] += value
