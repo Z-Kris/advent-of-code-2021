@@ -8,7 +8,7 @@ import kotlin.math.sign
  */
 object Day5 : Puzzle<List<Line>>(5) {
     private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
-    override fun parse(input: Sequence<String>): List<Line> = input.map {
+    override fun Sequence<String>.parse(): List<Line> = map {
         val (x1, y1, x2, y2) = regex.find(it)?.destructured?.toList()?.map(String::toInt) ?: error("Invalid input")
         Line(Point(x1, y1), Point(x2, y2))
     }.toList()
@@ -20,10 +20,10 @@ object Day5 : Puzzle<List<Line>>(5) {
         count { it.value >= threshold }
     }
 
-    override fun solvePartOne(input: List<Line>): Int =
-        input.filter { it.startPoint.x == it.endPoint.x || it.startPoint.y == it.endPoint.y }.getCountOfOverlappingPoints()
+    override fun List<Line>.solvePartOne(): Int =
+        filter { it.startPoint.x == it.endPoint.x || it.startPoint.y == it.endPoint.y }.getCountOfOverlappingPoints()
 
-    override fun solvePartTwo(input: List<Line>): Int = input.getCountOfOverlappingPoints()
+    override fun List<Line>.solvePartTwo(): Int = getCountOfOverlappingPoints()
 }
 
 data class Line(val startPoint: Point, val endPoint: Point) {

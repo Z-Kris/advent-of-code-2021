@@ -6,12 +6,12 @@ import aoc.Puzzle
  * @author Kris | 05/12/2021
  */
 object Day3 : Puzzle<List<Int>>(3) {
-    override fun parse(input: Sequence<String>) = input.map { it.toInt(2) }.toList()
+    override fun Sequence<String>.parse() = map { it.toInt(2) }.toList()
 
-    override fun solvePartOne(input: List<Int>): Long {
-        val counts = input.getBitCounts(input.getHighestEnabledBitIndex())
-        val gamma = counts.getCommonValue { it > input.size / 2 }
-        val epsilon = counts.getCommonValue { it < input.size / 2 }
+    override fun List<Int>.solvePartOne(): Long {
+        val counts = getBitCounts(getHighestEnabledBitIndex())
+        val gamma = counts.getCommonValue { it > size / 2 }
+        val epsilon = counts.getCommonValue { it < size / 2 }
         return gamma * epsilon
     }
 
@@ -21,10 +21,10 @@ object Day3 : Puzzle<List<Int>>(3) {
     private inline fun IntArray.getCommonValue(predicate: (value: Int) -> Boolean) =
         withIndex().sumOf { (index, value) -> if (predicate(value)) (1 shl index) else 0 }.toLong()
 
-    override fun solvePartTwo(input: List<Int>): Long {
-        val highestEnabledBitIndex = input.getHighestEnabledBitIndex()
-        val oxygenRating = input.toMutableList().getRating(highestEnabledBitIndex) { remainingValues, value -> value >= remainingValues.size / 2.0 }
-        val co2Rating = input.toMutableList().getRating(highestEnabledBitIndex) { remainingValues, value -> value < remainingValues.size / 2.0 }
+    override fun List<Int>.solvePartTwo(): Long {
+        val highestEnabledBitIndex = getHighestEnabledBitIndex()
+        val oxygenRating = toMutableList().getRating(highestEnabledBitIndex) { remainingValues, value -> value >= remainingValues.size / 2.0 }
+        val co2Rating = toMutableList().getRating(highestEnabledBitIndex) { remainingValues, value -> value < remainingValues.size / 2.0 }
         return oxygenRating * co2Rating
     }
 

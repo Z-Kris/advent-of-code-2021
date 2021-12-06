@@ -8,10 +8,10 @@ import java.io.FileNotFoundException
  */
 abstract class Puzzle<T>(val day: Int) {
     fun parse(): T = Puzzle::class.java.getResourceAsStream("day $day.txt").use { inputStream ->
-        inputStream?.bufferedReader()?.useLines(this::parse) ?: throw FileNotFoundException()
+        inputStream?.bufferedReader()?.useLines { it.parse() } ?: throw FileNotFoundException()
     }
-    fun parse(input: String): T = parse(input.splitToSequence('\n'))
-    abstract fun parse(input: Sequence<String>): T
-    abstract fun solvePartOne(input: T): Any
-    abstract fun solvePartTwo(input: T): Any
+    fun parse(input: String): T = input.splitToSequence('\n').parse()
+    abstract fun Sequence<String>.parse(): T
+    abstract fun T.solvePartOne(): Any
+    abstract fun T.solvePartTwo(): Any
 }

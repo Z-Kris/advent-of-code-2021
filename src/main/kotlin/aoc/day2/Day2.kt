@@ -9,17 +9,17 @@ object Day2 : Puzzle<List<String>>(2) {
     private val UP = Instruction("up")
     private val DOWN = Instruction("down")
     private val FORWARD = Instruction("forward")
-    override fun parse(input: Sequence<String>) = input.toList()
+    override fun Sequence<String>.parse() = toList()
 
-    override fun solvePartOne(input: List<String>): Long {
-        val forwardSum = input.sumOf(Regex("$FORWARD (\\d+)"))
-        val upSum = input.sumOf(Regex("$UP (\\d+)"))
-        val downSum = input.sumOf(Regex("$DOWN (\\d+)"))
+    override fun List<String>.solvePartOne(): Long {
+        val forwardSum = sumOf(Regex("$FORWARD (\\d+)"))
+        val upSum = sumOf(Regex("$UP (\\d+)"))
+        val downSum = sumOf(Regex("$DOWN (\\d+)"))
         return forwardSum.toLong() * (downSum - upSum)
     }
 
-    override fun solvePartTwo(input: List<String>): Long = with(Submarine()) {
-        input.toInstructions().forEach { (instruction, count) ->
+    override fun List<String>.solvePartTwo(): Long = with(Submarine()) {
+        toInstructions().forEach { (instruction, count) ->
             when (instruction) {
                 UP -> aim -= count
                 DOWN -> aim += count

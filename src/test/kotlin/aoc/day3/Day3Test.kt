@@ -1,5 +1,7 @@
 package aoc.day3
 
+import aoc.day3.Day3.solvePartOne
+import aoc.day3.Day3.solvePartTwo
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -25,11 +27,11 @@ internal class Day3Test {
 
     @Test
     fun partOne() {
-        assertEquals(198L, Day3.solvePartOne(testInput))
+        assertEquals(198L, testInput.solvePartOne())
     }
 
     @Test
     fun partTwo() {
-        assertEquals(230L, Day3.solvePartTwo(testInput))
+        assertEquals(230L, testInput.solvePartTwo())
     }
 }

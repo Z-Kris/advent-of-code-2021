@@ -11,14 +11,14 @@ object Day4 : Puzzle<Bingo>(4) {
     private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
     private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("\\s+")).map(String::toInt)
 
-    override fun parse(input: Sequence<String>): Bingo = with(input.toMutableList().apply { removeIf(String::isEmpty) }) {
+    override fun Sequence<String>.parse(): Bingo = with(toMutableList().apply { removeIf(String::isEmpty) }) {
         val winningNumbers = removeFirst().split(',').map(String::toInt)
         val bingoBoards = chunked(DIMENSION).getBingoBoards()
         Bingo(winningNumbers, bingoBoards)
     }
 
-    override fun solvePartOne(input: Bingo): Long = input.getWinningBoards().first().getScore()
-    override fun solvePartTwo(input: Bingo): Long = input.getWinningBoards().last().getScore()
+    override fun Bingo.solvePartOne(): Long = getWinningBoards().first().getScore()
+    override fun Bingo.solvePartTwo(): Long = getWinningBoards().last().getScore()
 
     private fun Bingo.getWinningBoards(): List<WinningBingoDraw> {
         val remainingNumbers = winningNumbers.toMutableList()

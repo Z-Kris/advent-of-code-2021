@@ -20,13 +20,15 @@ private fun main() = puzzles.forEach { solve(it) }
 private fun <T> solve(puzzle: Puzzle<T>) {
     val input = puzzle.parse()
 
-    val solutionPart1 = measureTimedValue {
-        puzzle.solvePartOne(input)
-    }
-    println("Day ${puzzle.day} Part 1: ${solutionPart1.value} (${solutionPart1.duration})")
+    with(puzzle) {
+        val solutionPart1 = measureTimedValue {
+            input.solvePartOne()
+        }
+        println("Day ${puzzle.day} Part 1: ${solutionPart1.value} (${solutionPart1.duration})")
 
-    val solutionPart2 = measureTimedValue {
-        puzzle.solvePartTwo(input)
+        val solutionPart2 = measureTimedValue {
+            input.solvePartTwo()
+        }
+        println("Day ${puzzle.day} Part 2: ${solutionPart2.value} (${solutionPart2.duration})")
     }
-    println("Day ${puzzle.day} Part 2: ${solutionPart2.value} (${solutionPart2.duration})")
 }
