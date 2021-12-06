@@ -17,18 +17,15 @@ private val puzzles = listOf<Puzzle<*>>(Day1, Day2, Day3, Day4, Day5)
 private fun main() = puzzles.forEach { solve(it) }
 
 @ExperimentalTime
-private fun <T> solve(puzzle: Puzzle<T>) {
-    val input = puzzle.parse()
-
-    with(puzzle) {
-        val solutionPart1 = measureTimedValue {
-            input.solvePartOne()
-        }
-        println("Day ${puzzle.day} Part 1: ${solutionPart1.value} (${solutionPart1.duration})")
-
-        val solutionPart2 = measureTimedValue {
-            input.solvePartTwo()
-        }
-        println("Day ${puzzle.day} Part 2: ${solutionPart2.value} (${solutionPart2.duration})")
+private fun <T> solve(puzzle: Puzzle<T>) = with(puzzle) {
+    val input = parse()
+    val solutionPart1 = measureTimedValue {
+        input.solvePartOne()
     }
+    println("Day ${puzzle.day} Part 1: ${solutionPart1.value} (${solutionPart1.duration})")
+
+    val solutionPart2 = measureTimedValue {
+        input.solvePartTwo()
+    }
+    println("Day ${puzzle.day} Part 2: ${solutionPart2.value} (${solutionPart2.duration})")
 }
