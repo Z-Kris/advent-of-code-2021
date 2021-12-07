@@ -56,16 +56,16 @@ data class Point(val x: Int, val y: Int)
 
 data class Line(val startPoint: Point, val endPoint: Point) {
     val straight get() = startPoint.x == endPoint.x || startPoint.y == endPoint.y
-    val xSigNum = (endPoint.x - startPoint.x).sign
-    val ySigNum = (endPoint.y - startPoint.y).sign
+    val xSignum = (endPoint.x - startPoint.x).sign
+    val ySignum = (endPoint.y - startPoint.y).sign
     val highestCoord get() = max(startPoint.x, max(startPoint.y, max(endPoint.x, endPoint.y)))
 
     inline fun forEachCoveredPoint(dimension: Int, consumer: PointConsumer) {
         var (x, y) = startPoint
         consumer(x * dimension + y)
         while (x != endPoint.x || y != endPoint.y) {
-            x += xSigNum
-            y += ySigNum
+            x += xSignum
+            y += ySignum
             consumer(x * dimension + y)
         }
     }
