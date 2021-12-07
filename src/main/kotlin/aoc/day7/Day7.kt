@@ -13,10 +13,10 @@ object Day7 : Puzzle<Crabs, Int>(7) {
         return Crabs(positions, farthestPosition)
     }
 
-    private inline fun Crabs.computeLeastAmountOfSteps(transformer: FuelTransformer = { it }) =
+    private inline fun Crabs.computeLeastAmountOfSteps(transformer: FuelTransformer) =
         positionRange.minOf { position -> positions.sumOf { transformer(abs(it - position)) } }
 
-    override fun Crabs.solvePartOne() = computeLeastAmountOfSteps()
+    override fun Crabs.solvePartOne() = computeLeastAmountOfSteps(Int::toInt)
     override fun Crabs.solvePartTwo() = computeLeastAmountOfSteps(Int::incrementingSum)
 }
 
