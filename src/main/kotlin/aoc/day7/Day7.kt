@@ -7,7 +7,6 @@ import kotlin.math.abs
 /**
  * @author Kris | 07/12/2021
  */
-@Suppress("NOTHING_TO_INLINE")
 object Day7 : Puzzle<Crabs, Int>(7) {
     override fun Sequence<String>.parse() = single().split(',').map(String::toInt).toSortedList()
 
