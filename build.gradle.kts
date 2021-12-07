@@ -8,12 +8,9 @@ plugins {
 group = "me.kris"
 version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-junit5
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.5.10")
 }
 
@@ -23,6 +20,7 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
 application {

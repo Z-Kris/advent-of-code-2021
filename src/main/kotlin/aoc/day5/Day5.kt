@@ -1,45 +1,72 @@
+@file:OptIn(ExperimentalStdlibApi::class)
+@file:Suppress("RemoveExplicitTypeArguments", "EXPERIMENTAL_IS_NOT_ENABLED")
+
 package aoc.day5
 
 import aoc.Puzzle
+import aoc.forEachFiltered
+import java.util.BitSet
+import kotlin.math.max
 import kotlin.math.sign
 
 /**
  * @author Kris | 05/12/2021
  */
-object Day5 : Puzzle<List<Line>, Int>(5) {
+@Suppress("NOTHING_TO_INLINE")
+object Day5 : Puzzle<HydrothermalVenture, Int>(5) {
     private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
-    override fun Sequence<String>.parse(): List<Line> = map {
-        val (x1, y1, x2, y2) = regex.find(it)?.destructured?.toList()?.map(String::toInt) ?: error("Invalid input")
-        Line(Point(x1, y1), Point(x2, y2))
-    }.toList()
 
-    private fun <T> MutableMap<T, Int>.increment(key: T) = merge(key, 1, Int::plus)
-
-    private fun List<Line>.getCountOfOverlappingPoints(threshold: Int = 2): Int = with(mutableMapOf<Point, Int>()) {
-        this@getCountOfOverlappingPoints.forEach { line -> line.getCoveredPoints().forEach { increment(it) } }
-        count { it.value >= threshold }
+    override fun Sequence<String>.parse(): HydrothermalVenture {
+        val lines = toList().getLines()
+        val dimension = lines.maxOf(Line::highestCoord)
+        return HydrothermalVenture(lines, dimension + 1)
     }
 
-    override fun List<Line>.solvePartOne(): Int =
-        filter { it.startPoint.x == it.endPoint.x || it.startPoint.y == it.endPoint.y }.getCountOfOverlappingPoints()
+    private fun List<String>.getLines() = map {
+        val (x1, y1, x2, y2) = it.getLinePoints()
+        Line(Point(x1, y1), Point(x2, y2))
+    }
 
-    override fun List<Line>.solvePartTwo(): Int = getCountOfOverlappingPoints()
+    private inline fun String.getLinePoints(): List<Int> = requireNotNull(regex.find(this)).destructured.toList().map(String::toInt)
+
+    private inline fun HydrothermalVenture.getCountOfOverlappingPoints(filter: LineFilter = { true }): Int {
+        val oceanFloor = Floor(size)
+        val markedFloor = Floor(size)
+        traverse(dimension, filter) { index -> if (oceanFloor.get(index)) markedFloor.set(index) else oceanFloor.set(index) }
+        return markedFloor.cardinality()
+    }
+
+    private inline fun HydrothermalVenture.traverse(dimension: Int, filter: LineFilter, consumer: PointConsumer) =
+        lines.forEachFiltered(filter) { line -> line.forEachCoveredPoint(dimension) { consumer(it) } }
+
+    override fun HydrothermalVenture.solvePartOne(): Int = getCountOfOverlappingPoints(Line::straight)
+    override fun HydrothermalVenture.solvePartTwo(): Int = getCountOfOverlappingPoints()
 }
 
-data class Line(val startPoint: Point, val endPoint: Point) {
-    fun getCoveredPoints(): List<Point> {
-        val xSigNum = (endPoint.x - startPoint.x).sign
-        val ySigNum = (endPoint.y - startPoint.y).sign
-        val points = mutableListOf<Point>()
-        var (x, y) = startPoint
-        while (x != endPoint.x || y != endPoint.y) {
-            points += Point(x, y)
-            x += xSigNum
-            y += ySigNum
-        }
-        points += endPoint
-        return points
-    }
+private typealias PointConsumer = (Int) -> Unit
+private typealias LineFilter = (Line) -> Boolean
+private typealias Lines = List<Line>
+private typealias Floor = BitSet
+
+data class HydrothermalVenture(val lines: Lines, val dimension: Int) {
+    val size: Int get() = dimension * dimension + dimension
 }
 
 data class Point(val x: Int, val y: Int)
+
+data class Line(val startPoint: Point, val endPoint: Point) {
+    val straight get() = startPoint.x == endPoint.x || startPoint.y == endPoint.y
+    val xSigNum = (endPoint.x - startPoint.x).sign
+    val ySigNum = (endPoint.y - startPoint.y).sign
+    val highestCoord get() = max(startPoint.x, max(startPoint.y, max(endPoint.x, endPoint.y)))
+
+    inline fun forEachCoveredPoint(dimension: Int, consumer: PointConsumer) {
+        var (x, y) = startPoint
+        consumer(x * dimension + y)
+        while (x != endPoint.x || y != endPoint.y) {
+            x += xSigNum
+            y += ySigNum
+            consumer(x * dimension + y)
+        }
+    }
+}

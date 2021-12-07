@@ -11,3 +11,5 @@ inline fun <T> T.chainRepeat(times: Int, action: (Int) -> Unit): T {
 }
 
 inline fun <K> Map<K, Long>.getOrZero(key: K) = getOrDefault(key, 0)
+
+inline fun <T> Iterable<T>.forEachFiltered(filter: (T) -> Boolean, action: (T) -> Unit) = forEach { element -> if (filter(element)) action(element) }
