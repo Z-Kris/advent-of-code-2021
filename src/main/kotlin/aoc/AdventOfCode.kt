@@ -1,3 +1,5 @@
+@file:Suppress("ConvertLambdaToReference")
+
 package aoc
 
 import aoc.day1.Day1
