@@ -24,5 +24,5 @@ inline fun <T> List<T>.medianValues(): List<T> = if (size and 0x1 == 0x1) {
 }
 
 inline fun List<Int>.meanValues(): List<Int> = with(sum() / size.toDouble()) {
-    listOf(floor(this).toInt(), ceil(this).toInt())
+    if (this.rem(1) == 0.0) listOf(floor(this).toInt()) else listOf(floor(this).toInt(), ceil(this).toInt())
 }
