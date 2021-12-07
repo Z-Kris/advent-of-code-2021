@@ -1,9 +1,7 @@
 package aoc.day7
 
-import aoc.Puzzle
-import aoc.meanValues
-import aoc.medianValues
-import aoc.self
+import aoc.*
+import aoc.SortedList.Companion.toSortedList
 import kotlin.math.abs
 
 /**
@@ -11,7 +9,7 @@ import kotlin.math.abs
  */
 @Suppress("NOTHING_TO_INLINE")
 object Day7 : Puzzle<Crabs, Int>(7) {
-    override fun Sequence<String>.parse() = single().split(',').map(String::toInt).sorted()
+    override fun Sequence<String>.parse() = single().split(',').map(String::toInt).toSortedList()
 
     private inline fun Crabs.minSumOf(positions: List<Int>, transformer: FuelTransformer) = positions.minOf { sum(it, transformer) }
     private inline fun Crabs.sum(position: Int, transformer: FuelTransformer) = sumOf { transformer(abs(it - position)) }
@@ -21,4 +19,4 @@ object Day7 : Puzzle<Crabs, Int>(7) {
 }
 private val Int.incrementingSum get() = this * (this + 1) / 2
 private typealias FuelTransformer = (distance: Int) -> Int
-private typealias Crabs = List<Int>
+private typealias Crabs = SortedList<Int>
