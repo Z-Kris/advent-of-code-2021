@@ -18,7 +18,7 @@ import kotlin.time.measureTimedValue
 private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7)
 
 @ExperimentalTime
-private fun main() = repeat(1000) { puzzles.forEach { solve(it) } }
+private fun main() = puzzles.forEach { solve(it) }
 
 @ExperimentalTime
 private fun <T, R> solve(puzzle: Puzzle<T, R>) = with(puzzle) {
