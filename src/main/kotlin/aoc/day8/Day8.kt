@@ -29,18 +29,18 @@ data class Digit(private val digit: Set<Char>) : Set<Char> by digit
 data class Segment(private val allDigits: List<Digit>) : List<Digit> by allDigits {
     private fun Digit.hasAll(vararg letters: Char) = letters.all { it in this }
     private fun Digit.hasNone(vararg letters: Char) = letters.none { it in this }
-    private fun Digit.firstNot(vararg letters: Char) = first { it !in letters }
+    private fun Digit.singleNot(vararg letters: Char) = single { it !in letters }
     private fun Digit.isAny(vararg options: Digit) = options.any { it == this }
     private fun Digit.onlyOneIn(other: Digit) = count { it in other } == 1
     fun Digit.isPartOneDigit() = isAny(one, four, seven, eight)
 
-    private val a by lazy(NONE) { seven.first { it !in one } }
-    private val b by lazy(NONE) { four.first { it !in three } }
-    private val c by lazy(NONE) { one.first { it !in six } }
-    private val d by lazy(NONE) { four.firstNot(b, c, f) }
-    private val e by lazy(NONE) { two.firstNot(a, c, d, g) }
-    private val f by lazy(NONE) { one.first { it != c } }
-    private val g by lazy(NONE) { three.firstNot(a, c, d, f) }
+    private val a by lazy(NONE) { seven.single { it !in one } }
+    private val b by lazy(NONE) { four.single { it !in three } }
+    private val c by lazy(NONE) { one.single { it !in six } }
+    private val d by lazy(NONE) { four.singleNot(b, c, f) }
+    private val e by lazy(NONE) { two.singleNot(a, c, d, g) }
+    private val f by lazy(NONE) { one.single { it != c } }
+    private val g by lazy(NONE) { three.singleNot(a, c, d, f) }
 
     private val zero by lazySearch(size = 6) { it.hasNone(d) }
     private val one by lazySearch(size = 2)
@@ -60,5 +60,5 @@ data class Segment(private val allDigits: List<Digit>) : List<Digit> by allDigit
 private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digit) -> Boolean = { true }):
     ReadOnlyProperty<Any?, Digit> = object : ReadOnlyProperty<Any?, Digit> {
     private var value: Digit? = null
-    override fun getValue(thisRef: Any?, property: KProperty<*>): Digit = value ?: first { size == it.size && predicate(it) }.also { value = it }
+    override fun getValue(thisRef: Any?, property: KProperty<*>): Digit = value ?: single { size == it.size && predicate(it) }.also { value = it }
 }
