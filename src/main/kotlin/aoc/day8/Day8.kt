@@ -9,29 +9,30 @@ import kotlin.reflect.KProperty
 /**
  * @author Kris | 08/12/2021
  */
-object Day8 : Puzzle<List<Code>, Int>(8) {
-    override fun Sequence<String>.parse(): List<Code> {
+object Day8 : Puzzle<List<SegmentDisplay>, Int>(8) {
+    override fun Sequence<String>.parse(): List<SegmentDisplay> {
         return toList().map { line ->
             val (numbers, codes) = line.split(" | ")
-            val segment = numbers.split(' ').map { Digits(it.toSet()) }
-            val digits = codes.split(' ').map { Digits(it.toSet()) }
-            Code(Segment(segment), digits)
+            val segment = numbers.split(' ').map { Digit(it.toSet()) }
+            val digits = codes.split(' ').map { Digit(it.toSet()) }
+            SegmentDisplay(Segment(segment), digits)
         }
     }
 
-    override fun List<Code>.solvePartOne(): Int = sumOf { code -> with(code.segment) { code.digits.count { digits -> digits.isPartOneDigit() } } }
-    override fun List<Code>.solvePartTwo(): Int = sumOf { code -> code.digits.map(code.segment::getDigit).concatenate().toInt() }
+    override fun List<SegmentDisplay>.solvePartOne(): Int = sumOf { code -> with(code.segment) { code.digits.count { digits -> digits.isPartOneDigit() } } }
+    override fun List<SegmentDisplay>.solvePartTwo(): Int = sumOf { code -> code.digits.map(code.segment::getDigit).concatenate().toInt() }
 }
 
-data class Code(val segment: Segment, val digits: List<Digits>)
-data class Digits(private val digits: Set<Char>) : Set<Char> by digits
-data class Segment(private val numbers: List<Digits>) : List<Digits> by numbers {
-    private fun Digits.hasAll(vararg letters: Char) = letters.all { it in this }
-    private fun Digits.hasNone(vararg letters: Char) = letters.none { it in this }
-    private fun Digits.findMissing(vararg letters: Char) = first { it !in letters }
-    private fun Digits.isAny(vararg options: Digits) = options.any { it == this }
-    private fun Digits.onlyOneIn(other: Digits) = count { it in other } == 1
-    fun Digits.isPartOneDigit() = isAny(one, four, seven, eight)
+data class SegmentDisplay(val segment: Segment, val digits: List<Digit>)
+data class Digit(private val digit: Set<Char>) : Set<Char> by digit
+
+data class Segment(private val allDigits: List<Digit>) : List<Digit> by allDigits {
+    private fun Digit.hasAll(vararg letters: Char) = letters.all { it in this }
+    private fun Digit.hasNone(vararg letters: Char) = letters.none { it in this }
+    private fun Digit.findMissing(vararg letters: Char) = first { it !in letters }
+    private fun Digit.isAny(vararg options: Digit) = options.any { it == this }
+    private fun Digit.onlyOneIn(other: Digit) = count { it in other } == 1
+    fun Digit.isPartOneDigit() = isAny(one, four, seven, eight)
 
     private val a by lazy(NONE) { seven.first { it !in one } }
     private val b by lazy(NONE) { four.first { it !in three } }
@@ -53,11 +54,11 @@ data class Segment(private val numbers: List<Digits>) : List<Digits> by numbers 
     private val nine by lazySearch(size = 6) { it.hasNone(e) }
 
     private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
-    fun getDigit(digits: Digits): Int = requireNotNull(this.digits.indexOf(digits))
+    fun getDigit(digits: Digit): Int = requireNotNull(this.digits.indexOf(digits))
 }
 
-private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digits) -> Boolean = { true }):
-    ReadOnlyProperty<Any?, Digits> = object : ReadOnlyProperty<Any?, Digits> {
-    private var value: Digits? = null
-    override fun getValue(thisRef: Any?, property: KProperty<*>): Digits = value ?: first { size == it.size && predicate(it) }.also { value = it }
+private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digit) -> Boolean = { true }):
+    ReadOnlyProperty<Any?, Digit> = object : ReadOnlyProperty<Any?, Digit> {
+    private var value: Digit? = null
+    override fun getValue(thisRef: Any?, property: KProperty<*>): Digit = value ?: first { size == it.size && predicate(it) }.also { value = it }
 }
