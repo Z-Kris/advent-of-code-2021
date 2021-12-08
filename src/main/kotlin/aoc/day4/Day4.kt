@@ -14,23 +14,20 @@ object Day4 : Puzzle<Bingo, Long>(4) {
     override fun Sequence<String>.parse(): Bingo = with(toMutableList().apply { removeIf(String::isEmpty) }) {
         val winningNumbers = removeFirst().split(',').map(String::toInt)
         val bingoBoards = chunked(DIMENSION).getBingoBoards()
-        Bingo(winningNumbers, bingoBoards)
+        Bingo(winningNumbers.withIndex().associate { it.value to winningNumbers.subList(0, it.index + 1).toSet() }, bingoBoards)
     }
 
     override fun Bingo.solvePartOne(): Long = getWinningBoards().first().getScore()
     override fun Bingo.solvePartTwo(): Long = getWinningBoards().last().getScore()
 
     private fun Bingo.getWinningBoards(): List<WinningBingoDraw> {
-        val remainingNumbers = winningNumbers.toMutableList()
         val remainingBoards = boards.toMutableList()
-        val drawnNumbers = mutableSetOf<Int>()
         val winningDraws = mutableListOf<WinningBingoDraw>()
-        while (remainingNumbers.isNotEmpty()) {
-            val drawnNumber = remainingNumbers.removeFirst()
-            drawnNumbers += drawnNumber
-            val winningBoards = remainingBoards.filter { it.hasWon(drawnNumbers) }.toSet()
-            winningBoards.forEach { board -> winningDraws += WinningBingoDraw(drawnNumber, board, drawnNumbers.toSet()) }
-            remainingBoards -= winningBoards
+        for ((drawnNumber, drawnNumbers) in draws) {
+            remainingBoards.filter { it.hasWon(drawnNumber, drawnNumbers) }.forEach { board ->
+                remainingBoards -= board
+                winningDraws += WinningBingoDraw(drawnNumber, board, drawnNumbers)
+            }
         }
         require(winningDraws.isNotEmpty())
         return winningDraws
@@ -38,16 +35,17 @@ object Day4 : Puzzle<Bingo, Long>(4) {
 
     private fun WinningBingoDraw.getScore(): Long {
         val sumOfUnmarkedNumbers = board.sumOf { if (it !in drawnNumbers) it else 0 }.toLong()
-        return sumOfUnmarkedNumbers * drawnNumber
+        return sumOfUnmarkedNumbers * winningNumber
     }
 
-    private fun BingoBoard.hasWon(drawnNumbers: Set<Int>): Boolean =
-        range.any { index -> drawnNumbers.containsAll(getRow(index)) || drawnNumbers.containsAll(getColumn(index)) }
+    private fun BingoBoard.hasWon(drawnNumber: Int, drawnNumbers: Set<Int>): Boolean =
+        drawnNumber in board && range.any { index -> allInRow(index, drawnNumbers) || allInColumn(index, drawnNumbers) }
 
-    private fun BingoBoard.getRow(row: Int): List<Int> = range.map { col -> this[row, col] }
-    private fun BingoBoard.getColumn(col: Int): List<Int> = range.map { row -> this[row, col] }
+    private fun BingoBoard.allInRow(row: Int, numbers: Set<Int>) = range.all { col -> this[row, col] in numbers }
+    private fun BingoBoard.allInColumn(col: Int, numbers: Set<Int>) = range.all { row -> this[row, col] in numbers }
     private operator fun BingoBoard.get(row: Int, column: Int): Int = get((row * DIMENSION) + column)
 }
-data class Bingo(val winningNumbers: List<Int>, val boards: List<BingoBoard>)
+
+data class Bingo(val draws: Map<Int, Set<Int>>, val boards: List<BingoBoard>)
 data class BingoBoard(val board: List<Int>) : List<Int> by board
-data class WinningBingoDraw(val drawnNumber: Int, val board: BingoBoard, val drawnNumbers: Set<Int>)
+data class WinningBingoDraw(val winningNumber: Int, val board: BingoBoard, val drawnNumbers: Set<Int>)
