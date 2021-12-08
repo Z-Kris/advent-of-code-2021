@@ -49,20 +49,7 @@ data class Segment(val numbers: List<Digits>) : List<Digits> by numbers {
     private val eight by lazy { first { it.size == 7 } }
     private val nine by lazy { first { it.size == 6 && !it.hasLetters(e) } }
 
-    fun getDigit(digits: Digits): Int = requireNotNull(this.digits[digits])
+    private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
 
-    private val digits by lazy {
-        mapOf(
-            zero to 0,
-            one to 1,
-            two to 2,
-            three to 3,
-            four to 4,
-            five to 5,
-            six to 6,
-            seven to 7,
-            eight to 8,
-            nine to 9
-        )
-    }
+    fun getDigit(digits: Digits): Int = requireNotNull(this.digits.indexOf(digits))
 }
