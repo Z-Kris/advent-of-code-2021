@@ -13,8 +13,8 @@ object Day8 : Puzzle<List<SegmentDisplay>, Int>(8) {
     override fun Sequence<String>.parse(): List<SegmentDisplay> {
         return toList().map { line ->
             val (numbers, codes) = line.split(" | ")
-            val segment = numbers.split(' ').map { Digit(it.toSet()) }
-            val digits = codes.split(' ').map { Digit(it.toSet()) }
+            val segment = numbers.split(' ').map(::Digit)
+            val digits = codes.split(' ').map(::Digit)
             SegmentDisplay(Segment(segment), digits)
         }
     }
@@ -24,7 +24,9 @@ object Day8 : Puzzle<List<SegmentDisplay>, Int>(8) {
 }
 
 data class SegmentDisplay(val segment: Segment, val digits: List<Digit>)
-data class Digit(private val digit: Set<Char>) : Set<Char> by digit
+data class Digit(private val digit: Set<Char>) : Set<Char> by digit {
+    constructor(string: String) : this(string.toSet())
+}
 
 data class Segment(private val allDigits: List<Digit>) : List<Digit> by allDigits {
     private fun Digit.hasAll(vararg letters: Char) = letters.all { it in this }
