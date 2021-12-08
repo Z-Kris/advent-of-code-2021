@@ -14,6 +14,8 @@ inline fun <T> T.chainRepeat(times: Int, action: (Int) -> Unit): T {
 }
 inline val <T> T.self: T get() = this
 
+inline fun <T> List<T>.concatenate() = joinToString(separator = "")
+
 inline fun <K> Map<K, Long>.getOrZero(key: K) = getOrDefault(key, 0)
 
 inline fun <T> Iterable<T>.forEachFiltered(filter: (T) -> Boolean, action: (T) -> Unit) = forEach { element -> if (filter(element)) action(element) }
