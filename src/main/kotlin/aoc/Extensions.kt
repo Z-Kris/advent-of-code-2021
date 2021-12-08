@@ -4,6 +4,8 @@ package aoc
 
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * @author Kris | 07/12/2021
@@ -28,4 +30,9 @@ inline fun <T> SortedList<T>.medianValues(): List<T> = if (size and 0x1 == 0x1) 
 
 inline fun SortedList<Int>.meanValues(): List<Int> = with(sum() / size.toDouble()) {
     if (this.rem(1) == 0.0) listOf(floor(this).toInt()) else listOf(floor(this).toInt(), ceil(this).toInt())
+}
+
+inline fun <T> Iterable<T>.lazySearch(crossinline predicate: (T) -> Boolean): ReadOnlyProperty<Any?, T> = object : ReadOnlyProperty<Any?, T> {
+    private var value: T? = null
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T = value ?: first(predicate).also { value = it }
 }

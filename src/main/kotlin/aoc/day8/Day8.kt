@@ -2,6 +2,8 @@ package aoc.day8
 
 import aoc.Puzzle
 import aoc.concatenate
+import aoc.lazySearch
+import kotlin.LazyThreadSafetyMode.NONE
 
 /**
  * @author Kris | 08/12/2021
@@ -30,24 +32,24 @@ data class Segment(val numbers: List<Digits>) : List<Digits> by numbers {
     private fun Digits.onlyOneIn(other: Digits) = count { it in other } == 1
     fun Digits.isPartOneDigit() = isAny(one, four, seven, eight)
 
-    private val a by lazy { seven.first { it !in one } }
-    private val b by lazy { four.first { it !in three } }
-    private val c by lazy { one.first { it !in six } }
-    private val d by lazy { four.missing(b, c, f) }
-    private val e by lazy { two.missing(a, c, d, g) }
-    private val f by lazy { one.first { it != c } }
-    private val g by lazy { three.missing(a, c, d, f) }
+    private val a by lazy(NONE) { seven.first { it !in one } }
+    private val b by lazy(NONE) { four.first { it !in three } }
+    private val c by lazy(NONE) { one.first { it !in six } }
+    private val d by lazy(NONE) { four.missing(b, c, f) }
+    private val e by lazy(NONE) { two.missing(a, c, d, g) }
+    private val f by lazy(NONE) { one.first { it != c } }
+    private val g by lazy(NONE) { three.missing(a, c, d, f) }
 
-    private val zero by lazy { first { it.size == 6 && !it.hasLetters(d) } }
-    private val one by lazy { first { it.size == 2 } }
-    private val two by lazy { first { it.size == 5 && it.hasLetters(a, c, d, g) && it.hasNone(f) } }
-    private val three by lazy { first { it.size == 5 && it.hasLetters(f, c) } }
-    private val four by lazy { first { it.size == 4 } }
-    private val five by lazy { first { it.size == 5 && it.hasNone(c, e) } }
-    private val six by lazy { first { it.size == 6 && it.onlyOneIn(one) } }
-    private val seven by lazy { first { it.size == 3 } }
-    private val eight by lazy { first { it.size == 7 } }
-    private val nine by lazy { first { it.size == 6 && !it.hasLetters(e) } }
+    private val zero by lazySearch { it.size == 6 && !it.hasLetters(d) }
+    private val one by lazySearch { it.size == 2 }
+    private val two by lazySearch { it.size == 5 && it.hasLetters(a, c, d, g) && it.hasNone(f) }
+    private val three by lazySearch { it.size == 5 && it.hasLetters(f, c) }
+    private val four by lazySearch { it.size == 4 }
+    private val five by lazySearch { it.size == 5 && it.hasNone(c, e) }
+    private val six by lazySearch { it.size == 6 && it.onlyOneIn(one) }
+    private val seven by lazySearch { it.size == 3 }
+    private val eight by lazySearch { it.size == 7 }
+    private val nine by lazySearch { it.size == 6 && !it.hasLetters(e) }
 
     private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
 
