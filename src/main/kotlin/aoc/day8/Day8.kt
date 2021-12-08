@@ -44,22 +44,22 @@ data class Segment(private val allDigits: List<Digit>) : List<Digit> by allDigit
     private val f by lazy(NONE) { one.single { it != c } }
     private val g by lazy(NONE) { three.singleNot(a, c, d, f) }
 
-    private val zero by lazySearch(size = 6) { it.hasNone(d) }
+    private val zero by lazySearch(size = 6) { hasNone(d) }
     private val one by lazySearch(size = 2)
-    private val two by lazySearch(size = 5) { it.hasAll(a, c, d, g) && it.hasNone(f) }
-    private val three by lazySearch(size = 5) { it.hasAll(f, c) }
+    private val two by lazySearch(size = 5) { hasAll(a, c, d, g) && hasNone(f) }
+    private val three by lazySearch(size = 5) { hasAll(f, c) }
     private val four by lazySearch(size = 4)
-    private val five by lazySearch(size = 5) { it.hasNone(c, e) }
-    private val six by lazySearch(size = 6) { it.onlyOneIn(one) }
+    private val five by lazySearch(size = 5) { hasNone(c, e) }
+    private val six by lazySearch(size = 6) { onlyOneIn(one) }
     private val seven by lazySearch(size = 3)
     private val eight by lazySearch(size = 7)
-    private val nine by lazySearch(size = 6) { it.hasNone(e) }
+    private val nine by lazySearch(size = 6) { hasNone(e) }
 
     private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
     fun getDigit(digits: Digit): Int = requireNotNull(this.digits.indexOf(digits))
 }
 
-private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digit) -> Boolean = { true }):
+private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digit).() -> Boolean = { true }):
     ReadOnlyProperty<Any?, Digit> = object : ReadOnlyProperty<Any?, Digit> {
     private var value: Digit? = null
     override fun getValue(thisRef: Any?, property: KProperty<*>): Digit = value ?: single { size == it.size && predicate(it) }.also { value = it }
