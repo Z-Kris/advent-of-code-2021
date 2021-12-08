@@ -2,8 +2,9 @@ package aoc.day8
 
 import aoc.Puzzle
 import aoc.concatenate
-import aoc.lazySearch
 import kotlin.LazyThreadSafetyMode.NONE
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * @author Kris | 08/12/2021
@@ -40,18 +41,24 @@ data class Segment(val numbers: List<Digits>) : List<Digits> by numbers {
     private val f by lazy(NONE) { one.first { it != c } }
     private val g by lazy(NONE) { three.missing(a, c, d, f) }
 
-    private val zero by lazySearch { it.size == 6 && !it.hasLetters(d) }
-    private val one by lazySearch { it.size == 2 }
-    private val two by lazySearch { it.size == 5 && it.hasLetters(a, c, d, g) && it.hasNone(f) }
-    private val three by lazySearch { it.size == 5 && it.hasLetters(f, c) }
-    private val four by lazySearch { it.size == 4 }
-    private val five by lazySearch { it.size == 5 && it.hasNone(c, e) }
-    private val six by lazySearch { it.size == 6 && it.onlyOneIn(one) }
-    private val seven by lazySearch { it.size == 3 }
-    private val eight by lazySearch { it.size == 7 }
-    private val nine by lazySearch { it.size == 6 && !it.hasLetters(e) }
+    private val zero by lazySearch(size = 6) { !it.hasLetters(d) }
+    private val one by lazySearch(size = 2)
+    private val two by lazySearch(size = 5) { it.hasLetters(a, c, d, g) && it.hasNone(f) }
+    private val three by lazySearch(size = 5) { it.hasLetters(f, c) }
+    private val four by lazySearch(size = 4)
+    private val five by lazySearch(size = 5) { it.hasNone(c, e) }
+    private val six by lazySearch(size = 6) { it.onlyOneIn(one) }
+    private val seven by lazySearch(size = 3)
+    private val eight by lazySearch(size = 7)
+    private val nine by lazySearch(size = 6) { !it.hasLetters(e) }
 
     private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
 
     fun getDigit(digits: Digits): Int = requireNotNull(this.digits.indexOf(digits))
+}
+
+private inline fun Segment.lazySearch(size: Int, crossinline predicate: (Digits) -> Boolean = { true }):
+    ReadOnlyProperty<Any?, Digits> = object : ReadOnlyProperty<Any?, Digits> {
+    private var value: Digits? = null
+    override fun getValue(thisRef: Any?, property: KProperty<*>): Digits = value ?: first { size == it.size && predicate(it) }.also { value = it }
 }
