@@ -41,7 +41,7 @@ data class Segment(private val numbers: List<Digits>) : List<Digits> by numbers 
     private val f by lazy(NONE) { one.first { it != c } }
     private val g by lazy(NONE) { three.findMissing(a, c, d, f) }
 
-    private val zero by lazySearch(size = 6) { !it.hasAll(d) }
+    private val zero by lazySearch(size = 6) { it.hasNone(d) }
     private val one by lazySearch(size = 2)
     private val two by lazySearch(size = 5) { it.hasAll(a, c, d, g) && it.hasNone(f) }
     private val three by lazySearch(size = 5) { it.hasAll(f, c) }
@@ -50,7 +50,7 @@ data class Segment(private val numbers: List<Digits>) : List<Digits> by numbers 
     private val six by lazySearch(size = 6) { it.onlyOneIn(one) }
     private val seven by lazySearch(size = 3)
     private val eight by lazySearch(size = 7)
-    private val nine by lazySearch(size = 6) { !it.hasAll(e) }
+    private val nine by lazySearch(size = 6) { it.hasNone(e) }
 
     private val digits by lazy { listOf(zero, one, two, three, four, five, six, seven, eight, nine) }
     fun getDigit(digits: Digits): Int = requireNotNull(this.digits.indexOf(digits))
