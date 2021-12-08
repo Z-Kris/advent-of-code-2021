@@ -24,8 +24,8 @@ object Day8 : Puzzle<List<Code>, Int>(8) {
 }
 
 data class Code(val segment: Segment, val digits: List<Digits>)
-data class Digits(val digits: Set<Char>) : Set<Char> by digits
-data class Segment(val numbers: List<Digits>) : List<Digits> by numbers {
+data class Digits(private val digits: Set<Char>) : Set<Char> by digits
+data class Segment(private val numbers: List<Digits>) : List<Digits> by numbers {
     private fun Digits.hasAll(vararg letters: Char) = letters.all { it in this }
     private fun Digits.hasNone(vararg letters: Char) = letters.none { it in this }
     private fun Digits.findMissing(vararg letters: Char) = first { it !in letters }
