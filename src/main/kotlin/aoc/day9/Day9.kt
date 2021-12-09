@@ -22,7 +22,7 @@ object Day9 : Puzzle<LavaTubes, Int>(9) {
         findLowPoints().map { computeConnectedPoints(it, emptyVisitedNodes()) }.sortedDescending().take(3).reduce(Int::times)
 
     private fun LavaTubes.findLowPoints(): List<Point> = points.filter { this[it] < requireNotNull(findNeighbours(it).minOrNull()) }
-    private fun LavaTubes.findNeighbours(point: Point) = findNeighbouringPoints(point).map { pos -> tubes[pos.x][pos.y] }
+    private fun LavaTubes.findNeighbours(point: Point) = findNeighbouringPoints(point).map(::get)
     private fun LavaTubes.findNeighbouringPoints(point: Point) = offsets.map(point::merge).filter(::contains)
 
     private fun LavaTubes.computeConnectedPoints(point: Point, visited: Array<BooleanArray>): Int {
