@@ -16,3 +16,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 6: Lanternfish](src/main/kotlin/aoc/day6/Day6.kt)             |    🌟    |    🌟    |
 | ✔ [Day 7: The Treachery of Whales](src/main/kotlin/aoc/day7/Day7.kt) |    🌟    |    🌟    |
 | ✔ [Day 8: Seven Segment Search](src/main/kotlin/aoc/day8/Day8.kt)    |    🌟    |    🌟    |
+| ✔ [Day 9: Smoke Basin](src/main/kotlin/aoc/day9/Day9.kt)             |    🌟    |    🌟    |

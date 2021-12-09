@@ -10,13 +10,14 @@ import aoc.day5.Day5
 import aoc.day6.Day6
 import aoc.day7.Day7
 import aoc.day8.Day8
+import aoc.day9.Day9
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8)
+private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9)
 
 @ExperimentalTime
 private fun main() = puzzles.forEach { solve(it) }

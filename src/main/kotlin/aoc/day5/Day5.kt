@@ -3,6 +3,7 @@
 
 package aoc.day5
 
+import aoc.Point
 import aoc.Puzzle
 import aoc.forEachFiltered
 import java.util.BitSet
@@ -51,8 +52,6 @@ private typealias Floor = BitSet
 data class HydrothermalVenture(val lines: Lines, val dimension: Int) {
     val size: Int get() = dimension * dimension + dimension
 }
-
-data class Point(val x: Int, val y: Int)
 
 data class Line(val startPoint: Point, val endPoint: Point) {
     val straight get() = startPoint.x == endPoint.x || startPoint.y == endPoint.y
