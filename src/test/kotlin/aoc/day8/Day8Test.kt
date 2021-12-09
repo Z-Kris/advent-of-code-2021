@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
  * @author Kris | 08/12/2021
  */
 @Suppress("SpellCheckingInspection")
-class Day8Test {
+internal class Day8Test {
     private val testInput = """
         be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
         edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
