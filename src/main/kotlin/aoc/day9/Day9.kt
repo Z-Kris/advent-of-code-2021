@@ -29,10 +29,10 @@ private val offsets = listOf(Point(0, 1), Point(0, -1), Point(1, 0), Point(-1, 0
 private fun LavaTubes.findNeighbouringPoints(point: Point) = offsets.map(point::merge).filter(::contains)
 
 data class LavaTubes(val tubes: List<List<Int>>, val maxRow: Int, val maxCol: Int) {
-    private val dimension get() = max(maxRow, maxCol)
-    private val rowRange get() = 0 until maxRow
-    private val colRange get() = 0 until maxCol
-    val points get() = rowRange.flatMap { row -> colRange.map { col -> Point(row, col) } }
+    private val dimension = max(maxRow, maxCol)
+    private val rowRange = 0 until maxRow
+    private val colRange = 0 until maxCol
+    val points = rowRange.flatMap { row -> colRange.map { col -> Point(row, col) } }
     operator fun get(point: Point) = tubes[point.x][point.y]
     operator fun contains(point: Point) = point.x in rowRange && point.y in colRange
     private fun emptyVisitedNodes() = BitSet(dimension * dimension)
