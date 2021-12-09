@@ -19,7 +19,7 @@ object Day9 : Puzzle<LavaTubes, Int>(9) {
 
     override fun LavaTubes.solvePartOne(): Int = findLowPoints().sumOf { this[it] + 1 }
     override fun LavaTubes.solvePartTwo(): Int =
-        findLowPoints().map { computeConnectedPoints(it, emptyNodesSet()) }.sortedDescending().take(3).reduce(Int::times)
+        findLowPoints().map { computeConnectedPoints(it, emptyVisitedNodes()) }.sortedDescending().take(3).reduce(Int::times)
 
     private fun LavaTubes.findLowPoints(): List<Point> = points.filter { this[it] < requireNotNull(findNeighbours(it).minOrNull()) }
     private fun LavaTubes.findNeighbours(point: Point) = findNeighbouringPoints(point).map { pos -> tubes[pos.x][pos.y] }
@@ -39,5 +39,5 @@ data class LavaTubes(val tubes: List<List<Int>>, val maxRow: Int, val maxCol: In
     operator fun get(x: Int, y: Int) = tubes[x][y]
     operator fun get(point: Point) = tubes[point.x][point.y]
     operator fun contains(point: Point) = point.x in rowRange && point.y in colRange
-    fun emptyNodesSet() = Array(maxRow) { BooleanArray(maxCol) }
+    fun emptyVisitedNodes() = Array(maxRow) { BooleanArray(maxCol) }
 }
