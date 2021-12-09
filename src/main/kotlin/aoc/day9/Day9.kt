@@ -31,7 +31,7 @@ data class LavaTubes(val tubes: List<List<Int>>, val maxRow: Int, val maxCol: In
     private val colRange get() = 0 until maxCol
     val points get() = rowRange.flatMap { row -> colRange.map { col -> Point(row, col) } }
     operator fun get(x: Int, y: Int) = tubes[x][y]
-    operator fun get(point: Point) = tubes[point.x][point.y]
+    operator fun get(point: Point) = get(point.x, point.y)
     operator fun contains(point: Point) = point.x in rowRange && point.y in colRange
     private fun emptyVisitedNodes() = Array(maxRow) { BooleanArray(maxCol) }
 
