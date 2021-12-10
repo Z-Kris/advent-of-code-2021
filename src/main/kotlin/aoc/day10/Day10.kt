@@ -17,10 +17,10 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce { acc, l -> acc * 5 + l }
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
     private fun List<String>.mapIncompleteChunks() = mapNotNull { if (illegalChunks.find(it) == null) it else null }
+    private fun List<String>.mapCorruptedChunks() = mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
     private val Char.chunk get() = Chunk.values().single { it.openingChar == this || it.closingChar == this }
 
-    override fun List<String>.solvePartOne(): Long =
-        mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }.sumOf { it.chunk.firstPoints }
+    override fun List<String>.solvePartOne(): Long = mapInvalidChunks().mapCorruptedChunks().sumOf { it.chunk.firstPoints }
 
     override fun List<String>.solvePartTwo(): Long =
         with(mapInvalidChunks().mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
