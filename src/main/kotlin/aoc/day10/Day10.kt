@@ -21,7 +21,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
     private val Char.chunk get() = Chunk.values().single { it.openingChar == this || it.closingChar == this }
 
-    override fun List<String>.solvePartOne(): Long = mapInvalidChunks().mapCorruptedChunks().sumOf { it.chunk.firstPoints }
+    override fun List<String>.solvePartOne(): Long = mapCorruptedChunks().sumOf { it.chunk.firstPoints }
     override fun List<String>.solvePartTwo(): Long = with(mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
 }
 
