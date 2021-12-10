@@ -20,7 +20,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
     private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (illegalChunks.find(it) == null) it else null }
     private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
-    private val Char.chunk get() = Chunk.values().single { it.openingChar == this || it.closingChar == this }
+    private val Char.chunk get() = Chunk.values().single { this in it.brackets }
 
     override fun List<String>.solvePartOne(): Long = mapCorruptedChunks().sumOf { it.chunk.firstPoints }
     override fun List<String>.solvePartTwo(): Long = mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted().let { it[it.size / 2] }
@@ -29,13 +29,12 @@ object Day10 : Puzzle<List<String>, Long>(10) {
 private fun Long.computePartTwo(value: Long) = this * 5 + value
 
 private enum class Chunk(
-    val openingChar: Char,
-    val closingChar: Char,
+    val brackets: String,
     val firstPoints: Long,
     val secondPoints: Long
 ) {
-    Round('(', ')', 3, 1),
-    Square('[', ']', 57, 2),
-    Curly('{', '}', 1_197, 3),
-    Angle('<', '>', 25_137, 4)
+    Round("()", 3, 1),
+    Square("[]", 57, 2),
+    Curly("{}", 1_197, 3),
+    Angle("<>", 25_137, 4)
 }
