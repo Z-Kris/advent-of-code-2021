@@ -23,7 +23,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     private val Char.chunk get() = Chunk.values().single { it.openingChar == this || it.closingChar == this }
 
     override fun List<String>.solvePartOne(): Long = mapCorruptedChunks().sumOf { it.chunk.firstPoints }
-    override fun List<String>.solvePartTwo(): Long = with(mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
+    override fun List<String>.solvePartTwo(): Long = mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted().let { it[it.size / 2] }
 }
 
 private fun Long.reducePartTwo(value: Long) = this * 5 + value
