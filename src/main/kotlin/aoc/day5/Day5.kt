@@ -15,7 +15,7 @@ import kotlin.math.sign
  */
 @Suppress("NOTHING_TO_INLINE")
 object Day5 : Puzzle<HydrothermalVenture, Int>(5) {
-    private val regex = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
+    private val REGEX = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
 
     override fun Sequence<String>.parse(): HydrothermalVenture {
         val lines = toList().getLines()
@@ -28,7 +28,7 @@ object Day5 : Puzzle<HydrothermalVenture, Int>(5) {
         Line(Point(x1, y1), Point(x2, y2))
     }
 
-    private inline fun String.getLinePoints(): List<Int> = requireNotNull(regex.find(this)).destructured.toList().map(String::toInt)
+    private inline fun String.getLinePoints(): List<Int> = requireNotNull(REGEX.find(this)).destructured.toList().map(String::toInt)
 
     private inline fun HydrothermalVenture.getCountOfOverlappingPoints(filter: LineFilter = { true }): Int {
         val oceanFloor = Floor(size)

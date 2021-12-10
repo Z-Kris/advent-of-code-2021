@@ -25,8 +25,8 @@ object Day9 : Puzzle<LavaTubes, Int>(9) {
     private fun LavaTubes.findNeighbours(point: Point) = findNeighbouringPoints(point).map(::get)
 }
 
-private val offsets = listOf(Point(0, 1), Point(0, -1), Point(1, 0), Point(-1, 0))
-private fun LavaTubes.findNeighbouringPoints(point: Point) = offsets.map(point::merge).filter(::contains)
+private val OFFSETS = listOf(Point(0, 1), Point(0, -1), Point(1, 0), Point(-1, 0))
+private fun LavaTubes.findNeighbouringPoints(point: Point) = OFFSETS.map(point::merge).filter(::contains)
 
 data class LavaTubes(val tubes: List<List<Int>>, val maxRow: Int, val maxCol: Int) {
     private val dimension = max(maxRow, maxCol)

@@ -7,7 +7,7 @@ import aoc.Puzzle
  */
 object Day4 : Puzzle<Bingo, Long>(4) {
     private const val DIMENSION = 5
-    private val range = 0 until DIMENSION
+    private val RANGE = 0 until DIMENSION
     private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
     private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("\\s+")).map(String::toInt)
 
@@ -39,10 +39,10 @@ object Day4 : Puzzle<Bingo, Long>(4) {
     }
 
     private fun BingoBoard.hasWon(drawnNumber: Int, drawnNumbers: Set<Int>): Boolean =
-        drawnNumber in board && range.any { index -> allInRow(index, drawnNumbers) || allInColumn(index, drawnNumbers) }
+        drawnNumber in board && RANGE.any { index -> allInRow(index, drawnNumbers) || allInColumn(index, drawnNumbers) }
 
-    private fun BingoBoard.allInRow(row: Int, numbers: Set<Int>) = range.all { col -> this[row, col] in numbers }
-    private fun BingoBoard.allInColumn(col: Int, numbers: Set<Int>) = range.all { row -> this[row, col] in numbers }
+    private fun BingoBoard.allInRow(row: Int, numbers: Set<Int>) = RANGE.all { col -> this[row, col] in numbers }
+    private fun BingoBoard.allInColumn(col: Int, numbers: Set<Int>) = RANGE.all { row -> this[row, col] in numbers }
     private operator fun BingoBoard.get(row: Int, column: Int): Int = get((row * DIMENSION) + column)
 }
 
