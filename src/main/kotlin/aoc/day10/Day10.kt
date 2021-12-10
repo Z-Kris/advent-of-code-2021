@@ -19,7 +19,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce(Long::computePartTwo)
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
     private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (ILLEGAL_CHUNKS.find(it) == null) it else null }
-    private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> ILLEGAL_CHUNKS.find(string)?.groupValues?.first()?.last() }
+    private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { ILLEGAL_CHUNKS.find(it)?.groupValues?.first()?.last() }
     private val Char.chunk get() = Chunk.values().single { this in it.brackets }
 
     override fun List<String>.solvePartOne(): Long = mapCorruptedChunks().sumOf { it.chunk.firstPoints }
