@@ -12,7 +12,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
 
     private tailrec fun String.replaceInvalidChunks(): String {
         val replaced = replace(validChunks, "")
-        return if (replaced.length == length) this else replaceInvalidChunks()
+        return if (replaced.length == length) this else replaced.replaceInvalidChunks()
     }
 
     private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce { acc, l -> acc * 5 + l }
