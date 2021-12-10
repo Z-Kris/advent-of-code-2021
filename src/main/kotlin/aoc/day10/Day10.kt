@@ -7,19 +7,19 @@ import aoc.minus
  * @author Kris | 10/12/2021
  */
 object Day10 : Puzzle<List<String>, Long>(10) {
-    private val illegalChunks = Regex("(?:\\(([}\\]>])|\\[([})>])|\\{([])>])|<([}\\])]))+")
-    private val validChunks = Regex("(?:\\[]|\\(\\)|<>|\\{})+")
+    private val ILLEGAL_CHUNKS = Regex("(?:\\(([}\\]>])|\\[([})>])|\\{([])>])|<([}\\])]))+")
+    private val VALID_CHUNKS = Regex("(?:\\[]|\\(\\)|<>|\\{})+")
     override fun Sequence<String>.parse(): List<String> = toList()
 
     private tailrec fun String.replaceInvalidChunks(): String {
-        val replaced = this - validChunks
+        val replaced = this - VALID_CHUNKS
         return if (replaced.length == length) this else replaced.replaceInvalidChunks()
     }
 
     private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce(Long::computePartTwo)
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
-    private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (illegalChunks.find(it) == null) it else null }
-    private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
+    private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (ILLEGAL_CHUNKS.find(it) == null) it else null }
+    private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> ILLEGAL_CHUNKS.find(string)?.groupValues?.first()?.last() }
     private val Char.chunk get() = Chunk.values().single { this in it.brackets }
 
     override fun List<String>.solvePartOne(): Long = mapCorruptedChunks().sumOf { it.chunk.firstPoints }
