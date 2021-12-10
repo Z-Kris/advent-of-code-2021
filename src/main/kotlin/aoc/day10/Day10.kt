@@ -15,7 +15,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
         return if (replaced.length == length) this else replaced.replaceInvalidChunks()
     }
 
-    private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce { acc, l -> acc * 5 + l }
+    private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce(Long::reducePartTwo)
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
     private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (illegalChunks.find(it) == null) it else null }
     private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
@@ -24,6 +24,8 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     override fun List<String>.solvePartOne(): Long = mapInvalidChunks().mapCorruptedChunks().sumOf { it.chunk.firstPoints }
     override fun List<String>.solvePartTwo(): Long = with(mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
 }
+
+private fun Long.reducePartTwo(value: Long) = this * 5 + value
 
 private enum class Chunk(
     val openingChar: Char,
