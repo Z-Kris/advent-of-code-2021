@@ -19,7 +19,7 @@ object Day9 : Puzzle<LavaTubes, Int>(9) {
     }
 
     override fun LavaTubes.solvePartOne(): Int = findLowPoints().sumOf { this[it] + 1 }
-    override fun LavaTubes.solvePartTwo(): Int = findLowPoints().map(::computeConnectedPoints).sortedDescending().take(3).reduce(Int::times)
+    override fun LavaTubes.solvePartTwo(): Int = findLowPoints().map(::numOfLowPoints).sortedDescending().take(3).reduce(Int::times)
 
     private fun LavaTubes.findLowPoints(): List<Point> = points.filter { this[it] < requireNotNull(findNeighbours(it).minOrNull()) }
     private fun LavaTubes.findNeighbours(point: Point) = findNeighbouringPoints(point).map(::get)
@@ -39,9 +39,11 @@ data class LavaTubes(val tubes: List<List<Int>>, val maxRow: Int, val maxCol: In
     operator fun BitSet.get(point: Point) = get(point.x * dimension + point.y)
     operator fun BitSet.set(point: Point, value: Boolean) = set(point.x * dimension + point.y, value)
 
-    fun computeConnectedPoints(point: Point, visited: BitSet = emptyVisitedNodes()): Int {
-        if (visited[point] || this[point] == 9) return 0
+    fun numOfLowPoints(point: Point): Int = emptyVisitedNodes().apply { visitLowNodes(point, this) }.cardinality()
+
+    private fun visitLowNodes(point: Point, visited: BitSet) {
+        if (visited[point] || this[point] == 9) return
         visited[point] = true
-        return 1 + findNeighbouringPoints(point).sumOf { computeConnectedPoints(it, visited) }
+        findNeighbouringPoints(point).forEach { visitLowNodes(it, visited) }
     }
 }
