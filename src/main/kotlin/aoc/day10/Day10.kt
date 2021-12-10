@@ -11,19 +11,18 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     override fun Sequence<String>.parse(): List<String> = toList()
 
     private tailrec fun String.replaceInvalidChunks(): String {
-        with(replace(validChunks, "")) { return if (this == this@replaceInvalidChunks) this else this.replaceInvalidChunks() }
+        val replaced = replace(validChunks, "")
+        return if (replaced.length == length) this else replaceInvalidChunks()
     }
 
     private fun String.computePartTwoPointsSum(): Long = reversed().map { it.chunk.secondPoints }.reduce { acc, l -> acc * 5 + l }
     private fun List<String>.mapInvalidChunks() = map { it.replaceInvalidChunks() }
-    private fun List<String>.mapIncompleteChunks() = mapNotNull { if (illegalChunks.find(it) == null) it else null }
-    private fun List<String>.mapCorruptedChunks() = mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
+    private fun List<String>.mapIncompleteChunks() = mapInvalidChunks().mapNotNull { if (illegalChunks.find(it) == null) it else null }
+    private fun List<String>.mapCorruptedChunks() = mapInvalidChunks().mapNotNull { string -> illegalChunks.find(string)?.groupValues?.first()?.last() }
     private val Char.chunk get() = Chunk.values().single { it.openingChar == this || it.closingChar == this }
 
     override fun List<String>.solvePartOne(): Long = mapInvalidChunks().mapCorruptedChunks().sumOf { it.chunk.firstPoints }
-
-    override fun List<String>.solvePartTwo(): Long =
-        with(mapInvalidChunks().mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
+    override fun List<String>.solvePartTwo(): Long = with(mapIncompleteChunks().map { it.computePartTwoPointsSum() }.sorted()) { this[size / 2] }
 }
 
 private enum class Chunk(
