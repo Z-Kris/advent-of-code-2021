@@ -1,6 +1,7 @@
 package aoc.day10
 
 import aoc.Puzzle
+import aoc.minus
 
 /**
  * @author Kris | 10/12/2021
@@ -11,7 +12,7 @@ object Day10 : Puzzle<List<String>, Long>(10) {
     override fun Sequence<String>.parse(): List<String> = toList()
 
     private tailrec fun String.replaceInvalidChunks(): String {
-        val replaced = replace(validChunks, "")
+        val replaced = this - validChunks
         return if (replaced.length == length) this else replaced.replaceInvalidChunks()
     }
 

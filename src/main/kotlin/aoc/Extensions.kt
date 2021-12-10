@@ -14,6 +14,8 @@ inline fun <T> T.chainRepeat(times: Int, action: (Int) -> Unit): T {
 }
 inline val <T> T.self: T get() = this
 
+inline operator fun String.minus(regex: Regex) = replace(regex, "")
+
 inline fun <T> List<T>.concatenate() = joinToString(separator = "")
 
 inline fun <K> Map<K, Long>.getOrZero(key: K) = getOrDefault(key, 0)
