@@ -12,11 +12,11 @@ object Day11 : Puzzle<Grid, Int>(11) {
         val list = toList()
         val elements = list.flatMap { it.map(Character::getNumericValue) }
         require(list.size == elements.size / list.size)
-        return Grid(elements, list.size, list.size)
+        return Grid(elements, list.size)
     }
 
-    override fun Grid.solvePartOne(): Int = DumboOctupuses(list.toMutableList(), maxX, maxY).sumOfRepetitions(PART_1_REPETITIONS)
-    override fun Grid.solvePartTwo() = DumboOctupuses(list.toMutableList(), maxX, maxY).firstOccurrenceOfFullyLitGrid()
+    override fun Grid.solvePartOne(): Int = DumboOctupuses(list.toMutableList(), dimension).sumOfRepetitions(PART_1_REPETITIONS)
+    override fun Grid.solvePartTwo() = DumboOctupuses(list.toMutableList(), dimension).firstOccurrenceOfFullyLitGrid()
 }
 
 private const val MIN_ENERGY = 0
@@ -24,15 +24,12 @@ private const val MAX_ENERGY = 10
 private val NEARBY_NODES_RANGE = -1..1
 private inline val Int.isExhausted get() = this == MIN_ENERGY
 
-data class Grid(val list: List<Int>, val maxX: Int, val maxY: Int)
+data class Grid(val list: List<Int>, val dimension: Int)
 private data class DumboOctupuses(
     private val octopuses: MutableList<Int>,
-    private val maxX: Int,
-    private val maxY: Int
+    private val dimension: Int
 ) : MutableList<Int> by octopuses {
-    private val dimension = kotlin.math.max(maxX, maxY)
-    private val nodesXRange = 0 until maxX
-    private val nodesYRange = 0 until maxY
+    private val nodesRange = 0 until dimension
     private fun reset() = forEachIndexed { index, value -> if (value == MAX_ENERGY) this[index] = MIN_ENERGY }
     private fun exhaustedCount() = count(Int::isExhausted)
     private inline val Int.toPoint get() = Point(this / dimension, this % dimension)
@@ -44,7 +41,7 @@ private data class DumboOctupuses(
 
     private fun increment(index: Int) = increment(index.toPoint)
     private fun increment(point: Point) {
-        if (point.x !in nodesXRange || point.y !in nodesYRange || this[point.toIndex] == MAX_ENERGY) return
+        if (point.x !in nodesRange || point.y !in nodesRange || this[point.toIndex] == MAX_ENERGY) return
         if (++this[point.toIndex] == MAX_ENERGY) forEachWithinRangeNode(point, ::increment)
     }
 
