@@ -46,10 +46,10 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         val nextPath = Path(path + node)
         /* Determine if we can allow a small node to get visited twice the next time around. */
         val nextAllowExtraSmall = if (allowExtraSmall) node.type != NodeType.Small || node !in path else false
+        /* Filter all the connection nodes down to only the ones that we can still visit given the criteria. */
+        val accessibleNodes = connectedNodes.filterNot { it.type == NodeType.Small && !nextAllowExtraSmall && it in path }
         /* Now, compute the sum of all the remaining possible paths from this path onward. */
-        return connectedNodes.filterNot { it.type == NodeType.Small && !nextAllowExtraSmall && it in path }.sumOf { nextNode ->
-            visit(nextNode, nextPath, nextAllowExtraSmall)
-        }
+        return accessibleNodes.sumOf { visit(it, nextPath, nextAllowExtraSmall) }
     }
 
     override fun NodeTree.solvePartOne(): Int = visit(start, Path(), false)
