@@ -44,14 +44,15 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     private inline val String.isSmallLabel get() = all(Char::isLowerCase)
     private inline val NodeTree.startNode get() = keys.single { it.bit == Int.MIN_VALUE }
     private inline val Node.isSmall get() = bit in SMALL_BIT_RANGE
+    private fun Grid.smallNodeEnabled(node: Node) = node.isSmall && get(node.bit)
 
     private fun NodeTree.visit(node: Node, grid: Grid, spareSmallCavern: Boolean): Int {
         if (node.bit == Int.MAX_VALUE) return SUCCESSFUL_PATH
         val connectedNodes = get(node) ?: return FAILED_PATH
         val nextGrid = if (node.isSmall) grid.cloneWithBit(node.bit) else grid
-        val nextSpareSmallCavern = if (spareSmallCavern) !node.isSmall || !grid.get(node.bit) else false
+        val exhaustedSpareCavern = !spareSmallCavern || grid.smallNodeEnabled(node)
         return connectedNodes.sumOf {
-            if (nextSpareSmallCavern || !grid.get(it.bit) || !it.isSmall) visit(it, nextGrid, nextSpareSmallCavern) else FAILED_PATH
+            if (!exhaustedSpareCavern || !grid.get(it.bit) || !it.isSmall) visit(it, nextGrid, !exhaustedSpareCavern) else FAILED_PATH
         }
     }
 
