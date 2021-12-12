@@ -48,7 +48,7 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
 
     private fun NodeTree.visit(node: Node, grid: Grid, spareSmallCavern: Boolean): Int {
         if (node.bit == Int.MAX_VALUE) return SUCCESSFUL_PATH
-        val connectedNodes = get(node) ?: return FAILED_PATH
+        val connectedNodes = requireNotNull(get(node))
         val nextGrid = if (node.isSmall) grid.cloneWithBit(node.bit) else grid
         val exhaustedSpareCavern = !spareSmallCavern || grid.smallNodeEnabled(node)
         return connectedNodes.sumOf {
