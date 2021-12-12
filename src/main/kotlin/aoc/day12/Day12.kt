@@ -36,7 +36,7 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     private fun NodeTree.visit(
         node: Node,
         path: Path,
-        smallUnusedNode: Node?
+        allowExtraSmall: Boolean
     ): Int {
         /* If we've reached the end, return here. */
         if (node.type == NodeType.End) return SUCCESSFUL_PATH
@@ -44,17 +44,16 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         val connectedNodes = get(node) ?: return FAILED_PATH
         /* Create a new path that's the continuation of previous, plus this node. */
         val nextPath = Path(path + node)
-        /* Determine the unused node - if the unused node is already set, do nothing. */
-        /* Otherwise, if the type is small, and it's already in the used nodes, set it to this, otherwise none. */
-        val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in path) node else null
+        /* Determine if we can allow a small node to get visited twice the next time around. */
+        val nextAllowExtraSmall = if (allowExtraSmall) node.type != NodeType.Small || node !in path else false
         /* Now, compute the sum of all the remaining possible paths from this path onward. */
-        return connectedNodes.filterNot { it.type == NodeType.Small && nextSmallUnusedNode != null && it in path }.sumOf { nextNode ->
-            visit(nextNode, nextPath, nextSmallUnusedNode)
+        return connectedNodes.filterNot { it.type == NodeType.Small && !nextAllowExtraSmall && it in path }.sumOf { nextNode ->
+            visit(nextNode, nextPath, nextAllowExtraSmall)
         }
     }
 
-    override fun NodeTree.solvePartOne(): Int = visit(start, Path(), /* Set the unused node to start as part one can't visit anything twice */ start)
-    override fun NodeTree.solvePartTwo(): Int = visit(start, Path(), null)
+    override fun NodeTree.solvePartOne(): Int = visit(start, Path(), false)
+    override fun NodeTree.solvePartTwo(): Int = visit(start, Path(), true)
 }
 private typealias NodeTree = Map<Node, List<Node>>
 data class Node(val name: String, val type: NodeType)
