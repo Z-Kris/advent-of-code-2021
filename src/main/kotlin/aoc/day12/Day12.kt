@@ -1,6 +1,7 @@
 package aoc.day12
 
 import aoc.Puzzle
+import java.util.*
 
 /**
  * @author Kris | 12/12/2021
@@ -8,59 +9,61 @@ import aoc.Puzzle
 object Day12 : Puzzle<NodeTree, Int>(12) {
     private const val START_LABEL = "start"
     private const val END_LABEL = "end"
+    /* The maximum size of the grid, this can be any number, but it will also allocate this number of bits underneath. */
+    private const val MAX_GRID_SIZE = 64
+    /* Since our grid is a bit set, we need to offset the large cave bits; In this case, we simply split it in half. */
+    private const val LARGE_BIT_OFFSET = MAX_GRID_SIZE shr 1
+    /* The range of bit ids that indicate it is a small cavern. */
+    private val SMALL_BIT_RANGE = 0 until LARGE_BIT_OFFSET
     private const val SUCCESSFUL_PATH = 1
     private const val FAILED_PATH = 0
 
     @OptIn(ExperimentalStdlibApi::class)
-    override fun Sequence<String>.parse(): NodeTree = buildMap<Node, MutableList<Node>> {
-        this@parse.forEach {
-            val (fromLabel, toLabel) = it.split('-')
-            val from = Node(fromLabel, fromLabel.nodeType)
-            val to = Node(toLabel, toLabel.nodeType)
-            if (isValid(from, to)) getOrPut(from, ::mutableListOf).add(to)
-            if (isValid(to, from)) getOrPut(to, ::mutableListOf).add(from)
+    override fun Sequence<String>.parse(): NodeTree {
+        /* Use two maps to track which label matches which bit index, as we convert it to unique bits. */
+        val smallBits = mutableMapOf<String, Int>()
+        val largeBits = mutableMapOf<String, Int>()
+        return buildMap<Node, MutableSet<Node>> {
+            this@parse.forEach {
+                val (fromLabel, toLabel) = it.split('-')
+                val from = Node(fromLabel.getAsBit(smallBits, largeBits))
+                val to = Node(toLabel.getAsBit(smallBits, largeBits))
+                if (isValid(from, to)) getOrPut(from, ::mutableSetOf).add(to)
+                if (isValid(to, from)) getOrPut(to, ::mutableSetOf).add(from)
+            }
         }
     }
 
-    private fun isValid(from: Node, to: Node) = from.type != NodeType.End && to.type != NodeType.Start
-
-    private val String.nodeType get() = when {
-        this == START_LABEL -> NodeType.Start
-        this == END_LABEL -> NodeType.End
-        this.first().isLowerCase() -> NodeType.Small
-        else -> NodeType.Large
+    private fun String.getAsBit(smallBits: MutableMap<String, Int>, largeBits: MutableMap<String, Int>) = when {
+        this == START_LABEL -> Int.MIN_VALUE
+        this == END_LABEL -> Int.MAX_VALUE
+        this.isSmallLabel -> smallBits.getOrPut(this, smallBits::size)
+        else -> largeBits.getOrPut(this) { LARGE_BIT_OFFSET + largeBits.size }
     }
 
-    private val NodeTree.start get() = keys.single { it.type == NodeType.Start }
+    private inline val String.isSmallLabel get() = all(Char::isLowerCase)
+    private inline val NodeTree.startNode get() = keys.single { it.bit == Int.MIN_VALUE }
+    private inline val Node.isSmall get() = bit in SMALL_BIT_RANGE
 
-    private fun NodeTree.visit(
-        node: Node,
-        path: Path,
-        allowExtraSmall: Boolean
-    ): Int {
-        /* If we've reached the end, return here. */
-        if (node.type == NodeType.End) return SUCCESSFUL_PATH
-        /* If there are no more connected nodes to this node, return here. */
+    private fun NodeTree.visit(node: Node, grid: Grid, spareSmallCavern: Boolean): Int {
+        if (node.bit == Int.MAX_VALUE) return SUCCESSFUL_PATH
         val connectedNodes = get(node) ?: return FAILED_PATH
-        /* Create a new path that's the continuation of previous, plus this node. */
-        val nextPath = Path(path + node)
-        /* Determine if we can allow a small node to get visited twice the next time around. */
-        val nextAllowExtraSmall = if (allowExtraSmall) node.type != NodeType.Small || node !in path else false
-        /* Filter all the connection nodes down to only the ones that we can still visit given the criteria. */
-        val accessibleNodes = connectedNodes.filterNot { it.type == NodeType.Small && !nextAllowExtraSmall && it in path }
-        /* Now, compute the sum of all the remaining possible paths from this path onward. */
-        return accessibleNodes.sumOf { visit(it, nextPath, nextAllowExtraSmall) }
+        val nextGrid = if (node.isSmall) grid.cloneWithBit(node.bit) else grid
+        val nextSpareSmallCavern = if (spareSmallCavern) !node.isSmall || !grid.get(node.bit) else false
+        return connectedNodes.sumOf {
+            if (nextSpareSmallCavern || !grid.get(it.bit) || !it.isSmall) visit(it, nextGrid, nextSpareSmallCavern) else FAILED_PATH
+        }
     }
 
-    override fun NodeTree.solvePartOne(): Int = visit(start, Path(), false)
-    override fun NodeTree.solvePartTwo(): Int = visit(start, Path(), true)
+    private fun Grid.cloneWithBit(bit: Int): Grid = (clone() as Grid).apply { set(bit) }
+    private fun isValid(from: Node, to: Node) = from.bit != Int.MAX_VALUE && to.bit != Int.MIN_VALUE
+
+    override fun NodeTree.solvePartOne(): Int = visit(startNode, Grid(MAX_GRID_SIZE), false)
+    override fun NodeTree.solvePartTwo(): Int = visit(startNode, Grid(MAX_GRID_SIZE), true)
 }
-private typealias NodeTree = Map<Node, List<Node>>
-data class Node(val name: String, val type: NodeType)
-data class Path(val nodes: List<Node> = emptyList()) : List<Node> by nodes
-enum class NodeType {
-    Start,
-    Large,
-    Small,
-    End,
-}
+
+private typealias NodeTree = Map<Node, Set<Node>>
+private typealias Grid = BitSet
+
+@JvmInline
+value class Node(val bit: Int)
