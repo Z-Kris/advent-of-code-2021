@@ -5,6 +5,7 @@ package aoc
 import aoc.day1.Day1
 import aoc.day10.Day10
 import aoc.day11.Day11
+import aoc.day12.Day12
 import aoc.day2.Day2
 import aoc.day3.Day3
 import aoc.day4.Day4
@@ -19,10 +20,10 @@ import kotlin.time.measureTimedValue
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9, Day10, Day11)
+private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9, Day10, Day11, Day12)
 
 @ExperimentalTime
-private fun main() = puzzles.forEach { solve(it) }
+private fun main() = repeat(100) { puzzles.forEach { solve(it) } }
 
 @ExperimentalTime
 private fun <T, R> solve(puzzle: Puzzle<T, R>) = with(puzzle) {
