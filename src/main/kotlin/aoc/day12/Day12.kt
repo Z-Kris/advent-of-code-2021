@@ -9,10 +9,13 @@ import java.util.*
 object Day12 : Puzzle<NodeTree, Int>(12) {
     private const val START_LABEL = "start"
     private const val END_LABEL = "end"
+
     /* The maximum size of the grid, this can be any number, but it will also allocate this number of bits underneath. */
     private const val MAX_GRID_SIZE = 64
+
     /* Since our grid is a bit set, we need to offset the large cave bits; In this case, we simply split it in half. */
     private const val LARGE_BIT_OFFSET = MAX_GRID_SIZE shr 1
+
     /* The range of bit ids that indicate it is a small cavern. */
     private val SMALL_BIT_RANGE = 0 until LARGE_BIT_OFFSET
     private const val SUCCESSFUL_PATH = 1
