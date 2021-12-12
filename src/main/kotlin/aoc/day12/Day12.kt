@@ -6,24 +6,28 @@ import aoc.Puzzle
  * @author Kris | 12/12/2021
  */
 object Day12 : Puzzle<NodeTree, Int>(12) {
+    private const val START_LABEL = "start"
+    private const val END_LABEL = "end"
+    private const val SUCCESSFUL_PATH = 1
+    private const val FAILED_PATH = 0
+
     override fun Sequence<String>.parse(): NodeTree {
-        val connections = map {
-            val (from, to) = it.split('-')
-            val fromNode = Node(from, from.nodeType)
-            val toNode = Node(to, to.nodeType)
-            fromNode to toNode
-        }
         val nodes = mutableMapOf<Node, MutableList<Node>>()
-        connections.forEach { pair ->
-            if (pair.first.type != NodeType.End && pair.second.type != NodeType.Start) nodes.getOrPut(pair.first, ::mutableListOf).add(pair.second)
-            if (pair.second.type != NodeType.End && pair.first.type != NodeType.Start) nodes.getOrPut(pair.second, ::mutableListOf).add(pair.first)
+        forEach {
+            val (fromLabel, toLabel) = it.split('-')
+            val from = Node(fromLabel, fromLabel.nodeType)
+            val to = Node(toLabel, toLabel.nodeType)
+            if (isValid(from, to)) nodes.getOrPut(from, ::mutableListOf).add(to)
+            if (isValid(to, from)) nodes.getOrPut(to, ::mutableListOf).add(from)
         }
         return nodes
     }
 
+    private fun isValid(from: Node, to: Node) = from.type != NodeType.End && to.type != NodeType.Start
+
     private val String.nodeType get() = when {
-        this == "start" -> NodeType.Start
-        this == "end" -> NodeType.End
+        this == START_LABEL -> NodeType.Start
+        this == END_LABEL -> NodeType.End
         this.first().isLowerCase() -> NodeType.Small
         else -> NodeType.Large
     }
@@ -34,32 +38,29 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         node: Node,
         path: Path,
         unavailableNodes: Set<Node>,
-        currentPaths: MutableList<Path>,
         smallUnusedNode: Node?
-    ) {
+    ): Int {
+        /* If we've reached the end, return here. */
+        if (node.type == NodeType.End) return SUCCESSFUL_PATH
+        /* If there are no more connected nodes to this node, return here. */
+        val connectedNodes = get(node) ?: return FAILED_PATH
+        /* Create a new path that's the continuation of previous, plus this node. */
         val nextPath = Path(path + node)
-        val unvisitedSmallNode = node.type == NodeType.Small && node !in unavailableNodes
-        val nextUnavailableNodes = if (unvisitedSmallNode) (unavailableNodes + node) else unavailableNodes
-        val nextExtraSmallNode = smallUnusedNode ?: if (node.type == NodeType.Small && !unvisitedSmallNode) node else null
-        if (node.type == NodeType.End) {
-            currentPaths += nextPath
-            return
-        }
-        val connectedNodes = get(node) ?: return
-        for (nextNode in connectedNodes) {
-            if (nextExtraSmallNode != null && nextNode in unavailableNodes) continue
-            visit(nextNode, nextPath, nextUnavailableNodes, currentPaths, nextExtraSmallNode)
+        /* Determine the unused node - if the unused node is already set, do nothing. */
+        /* Otherwise, if the type is small, and it's already in the unavailable nodes, set it to this, otherwise none. */
+        val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in unavailableNodes) node else null
+        /* Determine the next unavailable nodes - if this type was small, include it in the previous set, otherwise use previous */
+        val nextUnavailableNodes = if (node.type == NodeType.Small) (unavailableNodes + node) else unavailableNodes
+        /* Now, compute the sum of all the remaining possible paths from this path onward. */
+        return connectedNodes.sumOf { nextNode ->
+            if (nextSmallUnusedNode != null && nextNode in unavailableNodes) FAILED_PATH
+            else visit(nextNode, nextPath, nextUnavailableNodes, nextSmallUnusedNode)
         }
     }
 
-    private fun NodeTree.countUniquePaths(smallUnusedNode: Node?): Int {
-        val paths = mutableListOf<Path>()
-        visit(start, Path(), setOf(), paths, smallUnusedNode)
-        return paths.size
-    }
+    private fun NodeTree.countUniquePaths(smallUnusedNode: Node?): Int = visit(start, Path(), emptySet(), smallUnusedNode)
 
     override fun NodeTree.solvePartOne(): Int = countUniquePaths(/* Set the unused node to start as part one can't visit anything twice */ start)
-
     override fun NodeTree.solvePartTwo(): Int = countUniquePaths(null)
 }
 private typealias NodeTree = Map<Node, List<Node>>
