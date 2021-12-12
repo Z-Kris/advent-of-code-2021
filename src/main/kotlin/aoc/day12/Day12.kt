@@ -11,16 +11,15 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     private const val SUCCESSFUL_PATH = 1
     private const val FAILED_PATH = 0
 
-    override fun Sequence<String>.parse(): NodeTree {
-        val nodes = mutableMapOf<Node, MutableList<Node>>()
-        forEach {
+    @OptIn(ExperimentalStdlibApi::class)
+    override fun Sequence<String>.parse(): NodeTree = buildMap<Node, MutableList<Node>> {
+        this@parse.forEach {
             val (fromLabel, toLabel) = it.split('-')
             val from = Node(fromLabel, fromLabel.nodeType)
             val to = Node(toLabel, toLabel.nodeType)
-            if (isValid(from, to)) nodes.getOrPut(from, ::mutableListOf).add(to)
-            if (isValid(to, from)) nodes.getOrPut(to, ::mutableListOf).add(from)
+            if (isValid(from, to)) getOrPut(from, ::mutableListOf).add(to)
+            if (isValid(to, from)) getOrPut(to, ::mutableListOf).add(from)
         }
-        return nodes
     }
 
     private fun isValid(from: Node, to: Node) = from.type != NodeType.End && to.type != NodeType.Start
