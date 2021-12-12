@@ -1,17 +1,19 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package aoc.day12
 
 import aoc.Puzzle
-import java.util.*
 
 /**
  * @author Kris | 12/12/2021
  */
 object Day12 : Puzzle<NodeTree, Int>(12) {
+    private const val STARTING_GRID = 0
     private const val START_LABEL = "start"
     private const val END_LABEL = "end"
 
-    /* The maximum size of the grid, this can be any number, but it will also allocate this number of bits underneath. */
-    private const val MAX_GRID_SIZE = 64
+    /* The maximum number of unique elements in the grid, excluding start and end. */
+    private const val MAX_GRID_SIZE = Int.SIZE_BITS
 
     /* Since our grid is a bit set, we need to offset the large cave bits; In this case, we simply split it in half. */
     private const val LARGE_BIT_OFFSET = MAX_GRID_SIZE shr 1
@@ -44,15 +46,16 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         else -> largeBits.getOrPut(this) { LARGE_BIT_OFFSET + largeBits.size }
     }
 
+    private inline operator fun Grid.get(bitId: Int): Boolean = this shr bitId and 0x1 != 0
     private inline val String.isSmallLabel get() = all(Char::isLowerCase)
     private inline val NodeTree.startNode get() = keys.single { it.bit == Int.MIN_VALUE }
     private inline val Node.isSmall get() = bit in SMALL_BIT_RANGE
-    private fun Grid.smallNodeEnabled(node: Node) = node.isSmall && get(node.bit)
+    private inline fun Grid.smallNodeEnabled(node: Node) = node.isSmall && get(node.bit)
 
     private fun NodeTree.visit(node: Node, grid: Grid, spareSmallCavern: Boolean): Int {
         if (node.bit == Int.MAX_VALUE) return SUCCESSFUL_PATH
         val connectedNodes = requireNotNull(get(node))
-        val nextGrid = if (node.isSmall) grid.cloneWithBit(node.bit) else grid
+        val nextGrid = if (node.isSmall) grid.enable(node.bit) else grid
         val exhaustedSpareCavern = !spareSmallCavern || grid.smallNodeEnabled(node)
         return connectedNodes.sumOf {
             if (exhaustedSpareCavern && grid.smallNodeEnabled(it)) FAILED_PATH
@@ -60,15 +63,15 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         }
     }
 
-    private fun Grid.cloneWithBit(bit: Int): Grid = (clone() as Grid).apply { set(bit) }
-    private fun isValid(from: Node, to: Node) = from.bit != Int.MAX_VALUE && to.bit != Int.MIN_VALUE
+    private inline fun Grid.enable(bit: Int): Grid = this or (1 shl bit)
+    private inline fun isValid(from: Node, to: Node) = from.bit != Int.MAX_VALUE && to.bit != Int.MIN_VALUE
 
-    override fun NodeTree.solvePartOne(): Int = visit(startNode, Grid(MAX_GRID_SIZE), false)
-    override fun NodeTree.solvePartTwo(): Int = visit(startNode, Grid(MAX_GRID_SIZE), true)
+    override fun NodeTree.solvePartOne(): Int = visit(startNode, STARTING_GRID, false)
+    override fun NodeTree.solvePartTwo(): Int = visit(startNode, STARTING_GRID, true)
 }
 
 private typealias NodeTree = Map<Node, Set<Node>>
-private typealias Grid = BitSet
+private typealias Grid = Int
 
 @JvmInline
 value class Node(val bit: Int)
