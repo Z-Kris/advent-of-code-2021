@@ -36,7 +36,6 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     private fun NodeTree.visit(
         node: Node,
         path: Path,
-        unavailableNodes: Set<Node>,
         smallUnusedNode: Node?
     ): Int {
         /* If we've reached the end, return here. */
@@ -47,23 +46,34 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         val nextPath = Path(path + node)
         /* Determine the unused node - if the unused node is already set, do nothing. */
         /* Otherwise, if the type is small, and it's already in the unavailable nodes, set it to this, otherwise none. */
-        val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in unavailableNodes) node else null
-        /* Determine the next unavailable nodes - if this type was small, include it in the previous set, otherwise use previous */
-        val nextUnavailableNodes = if (node.type == NodeType.Small) (unavailableNodes + node) else unavailableNodes
+        val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in path) node else null
         /* Now, compute the sum of all the remaining possible paths from this path onward. */
         return connectedNodes.sumOf { nextNode ->
-            if (nextSmallUnusedNode != null && nextNode in unavailableNodes) FAILED_PATH
-            else visit(nextNode, nextPath, nextUnavailableNodes, nextSmallUnusedNode)
+            if (nextNode.type == NodeType.Small && nextSmallUnusedNode != null && nextNode in path) FAILED_PATH
+            else visit(nextNode, nextPath, nextSmallUnusedNode)
         }
     }
 
-    private fun NodeTree.countUniquePaths(smallUnusedNode: Node?): Int = visit(start, Path(), emptySet(), smallUnusedNode)
-
-    override fun NodeTree.solvePartOne(): Int = countUniquePaths(/* Set the unused node to start as part one can't visit anything twice */ start)
-    override fun NodeTree.solvePartTwo(): Int = countUniquePaths(null)
+    override fun NodeTree.solvePartOne(): Int = visit(start, Path(), /* Set the unused node to start as part one can't visit anything twice */ start)
+    override fun NodeTree.solvePartTwo(): Int = visit(start, Path(), null)
 }
 private typealias NodeTree = Map<Node, List<Node>>
-data class Node(val name: String, val type: NodeType)
+data class Node(val name: String, val type: NodeType) {
+    private val hashCode = 31 * name.hashCode() + type.hashCode()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Node
+
+        if (name != other.name) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode() = hashCode
+}
 data class Path(val nodes: List<Node> = emptyList()) : List<Node> by nodes
 enum class NodeType {
     Start,
