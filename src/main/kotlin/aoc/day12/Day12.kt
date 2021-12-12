@@ -48,9 +48,8 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         /* Otherwise, if the type is small, and it's already in the unavailable nodes, set it to this, otherwise none. */
         val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in path) node else null
         /* Now, compute the sum of all the remaining possible paths from this path onward. */
-        return connectedNodes.sumOf { nextNode ->
-            if (nextNode.type == NodeType.Small && nextSmallUnusedNode != null && nextNode in path) FAILED_PATH
-            else visit(nextNode, nextPath, nextSmallUnusedNode)
+        return connectedNodes.filterNot { it.type == NodeType.Small && nextSmallUnusedNode != null && it in path }.sumOf { nextNode ->
+            visit(nextNode, nextPath, nextSmallUnusedNode)
         }
     }
 
@@ -58,22 +57,7 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     override fun NodeTree.solvePartTwo(): Int = visit(start, Path(), null)
 }
 private typealias NodeTree = Map<Node, List<Node>>
-data class Node(val name: String, val type: NodeType) {
-    private val hashCode = 31 * name.hashCode() + type.hashCode()
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Node
-
-        if (name != other.name) return false
-        if (type != other.type) return false
-
-        return true
-    }
-
-    override fun hashCode() = hashCode
-}
+data class Node(val name: String, val type: NodeType)
 data class Path(val nodes: List<Node> = emptyList()) : List<Node> by nodes
 enum class NodeType {
     Start,
