@@ -52,7 +52,8 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         val nextGrid = if (node.isSmall) grid.cloneWithBit(node.bit) else grid
         val exhaustedSpareCavern = !spareSmallCavern || grid.smallNodeEnabled(node)
         return connectedNodes.sumOf {
-            if (!exhaustedSpareCavern || !grid.get(it.bit) || !it.isSmall) visit(it, nextGrid, !exhaustedSpareCavern) else FAILED_PATH
+            if (exhaustedSpareCavern && grid.smallNodeEnabled(it)) FAILED_PATH
+            else visit(it, nextGrid, !exhaustedSpareCavern)
         }
     }
 
