@@ -45,7 +45,7 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
         /* Create a new path that's the continuation of previous, plus this node. */
         val nextPath = Path(path + node)
         /* Determine the unused node - if the unused node is already set, do nothing. */
-        /* Otherwise, if the type is small, and it's already in the unavailable nodes, set it to this, otherwise none. */
+        /* Otherwise, if the type is small, and it's already in the used nodes, set it to this, otherwise none. */
         val nextSmallUnusedNode = smallUnusedNode ?: if (node.type == NodeType.Small && node in path) node else null
         /* Now, compute the sum of all the remaining possible paths from this path onward. */
         return connectedNodes.filterNot { it.type == NodeType.Small && nextSmallUnusedNode != null && it in path }.sumOf { nextNode ->
