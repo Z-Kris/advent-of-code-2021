@@ -18,14 +18,12 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
         toList().let { lines -> InstructionManual(buildList { lines.forEach { addPoint(it) } }, buildList { lines.forEach { addInstruction(it) } }) }
 
     private fun MutableList<Point>.addPoint(line: String) {
-        val pointMatch = POINT_REGEX.find(line) ?: return
-        val (x, y) = pointMatch.destructured
+        val (x, y) = POINT_REGEX.find(line)?.destructured ?: return
         this += Point(x, y)
     }
 
     private fun MutableList<Point>.addInstruction(line: String) {
-        val instructionMatch = INSTRUCTION_REGEX.find(line) ?: return
-        val (type, count) = instructionMatch.destructured
+        val (type, count) = INSTRUCTION_REGEX.find(line)?.destructured ?: return
         this += when (type.single()) {
             'x' -> Point(count, 0)
             'y' -> Point(0, count)
