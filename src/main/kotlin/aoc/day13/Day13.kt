@@ -34,10 +34,10 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
         return InstructionManual(points, instructions)
     }
 
-    override fun InstructionManual.solvePartOne(): SingleFoldOrigami = SingleFoldOrigami(fold(1).count())
-    override fun InstructionManual.solvePartTwo(): FullyFoldedOrigami = FullyFoldedOrigami(fold(instructions.size).toSheet())
+    override fun InstructionManual.solvePartOne(): SingleFoldOrigami = SingleFoldOrigami(foldPoints(1).count())
+    override fun InstructionManual.solvePartTwo(): FullyFoldedOrigami = FullyFoldedOrigami(foldPoints(instructions.size).toSheet())
 
-    private fun InstructionManual.fold(numFolds: Int): Set<Point> = points.map { it.fold(0 until numFolds, instructions) }.toSet()
+    private fun InstructionManual.foldPoints(numFolds: Int): Set<Point> = points.map { it.fold(0 until numFolds, instructions) }.toSet()
     private fun Point.fold(range: IntRange, instructions: List<Point>) = range.fold(this) { acc, idx -> acc.fold(instructions[idx]) }
     private fun Point.fold(instruction: Point) = Point(x.foldAt(instruction.x), y.foldAt(instruction.y))
     private fun Int.foldAt(instruction: Int) = if (this > instruction) abs(instruction * 2 - this) else this
