@@ -11,7 +11,7 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
     private const val MARKED_CHAR = '█'
     private const val UNMARKED_CHAR = ' '
     private val POINT_REGEX = Regex("(\\d+),(\\d+)")
-    private val INSTRUCTION_REGEX = Regex("fold along ([xy])=(\\d++)")
+    private val INSTRUCTION_REGEX = Regex("fold along ([xy])=(\\d+)")
 
     @OptIn(ExperimentalStdlibApi::class)
     override fun Sequence<String>.parse(): InstructionManual =
