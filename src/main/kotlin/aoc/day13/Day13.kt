@@ -50,7 +50,7 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
             }
             builder.append('\n')
         }
-        return builder.toString()
+        return builder.substring(0, builder.length - 1)
     }
 }
 

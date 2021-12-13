@@ -39,7 +39,6 @@ internal class Day13Test {
         █   █
         █   █
         █████
-
     """.trimIndent()
 
     private val realResult = """
@@ -49,7 +48,6 @@ internal class Day13Test {
         █  █ █    █ █     █ ███  █  █ ████ █ ██
         █  █ █    █ █  █  █ █ █  █  █ █  █ █  █
         ███  ████ █  █  ██  █  █ ███  █  █  ███
-        
     """.trimIndent()
 
     @Test
