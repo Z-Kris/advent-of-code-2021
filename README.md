@@ -20,3 +20,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 10: Syntax Scoring](src/main/kotlin/aoc/day10/Day10.kt)       |    🌟    |    🌟    |
 | ✔ [Day 11: Dumbo Octopus](src/main/kotlin/aoc/day11/Day11.kt)        |    🌟    |    🌟    |
 | ✔ [Day 12: Passage Pathing](src/main/kotlin/aoc/day12/Day12.kt)      |    🌟    |    🌟    |
+| ✔ [Day 13: Transparent Origami](src/main/kotlin/aoc/day13/Day13.kt)  |    🌟    |    🌟    |
