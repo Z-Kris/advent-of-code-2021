@@ -36,8 +36,8 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
     override fun InstructionManual.solvePartOne(): SingleFoldOrigami = SingleFoldOrigami(foldPoints(1).count())
     override fun InstructionManual.solvePartTwo(): FullyFoldedOrigami = FullyFoldedOrigami(foldPoints(instructions.size).toSheet())
 
-    private fun InstructionManual.foldPoints(numFolds: Int): Set<Point> = points.map { it.fold(0 until numFolds, instructions) }.toSet()
-    private fun Point.fold(range: IntRange, instructions: List<Point>) = range.fold(this) { acc, idx -> acc.fold(instructions[idx]) }
+    private fun InstructionManual.foldPoints(numFolds: Int): Set<Point> = points.map { it.fold(numFolds, instructions) }.toSet()
+    private fun Point.fold(numFolds: Int, instructions: List<Point>) = (0 until numFolds).fold(this) { acc, idx -> acc.fold(instructions[idx]) }
     private fun Point.fold(instruction: Point) = Point(x.foldAt(instruction.x), y.foldAt(instruction.y))
     private fun Int.foldAt(instruction: Int) = if (this > instruction) abs(instruction * 2 - this) else this
 
