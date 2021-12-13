@@ -29,7 +29,7 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
         this += when (type.single()) {
             'x' -> Point(count, 0)
             'y' -> Point(0, count)
-            else -> error("Invalid coord")
+            else -> error("Invalid coord: $type")
         }
     }
 
