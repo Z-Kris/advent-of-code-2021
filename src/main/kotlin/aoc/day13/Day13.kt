@@ -16,22 +16,27 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
     override fun Sequence<String>.parse(): InstructionManual {
         val points = mutableListOf<Point>()
         val instructions = mutableListOf<Point>()
-        forEach { line ->
-            val pointMatch = POINT_REGEX.find(line)
-            val instructionMatch = INSTRUCTION_REGEX.find(line)
-            when {
-                pointMatch != null -> {
-                    val (x, y) = pointMatch.destructured
-                    points += Point(x.toInt(), y.toInt())
-                }
-                instructionMatch != null -> {
-                    val (type, count) = instructionMatch.destructured
-                    instructions += if (type == "x") Point(count.toInt(), 0) else if (type == "y") Point(0, count.toInt()) else error("Invalid coord")
-                }
-                else -> { /* no-op; whitespace */ }
-            }
+        forEach {
+            points.addPoint(it)
+            instructions.addInstruction(it)
         }
         return InstructionManual(points, instructions)
+    }
+
+    private fun MutableList<Point>.addPoint(line: String) {
+        val pointMatch = POINT_REGEX.find(line) ?: return
+        val (x, y) = pointMatch.destructured
+        this += Point(x, y)
+    }
+
+    private fun MutableList<Point>.addInstruction(line: String) {
+        val instructionMatch = INSTRUCTION_REGEX.find(line) ?: return
+        val (type, count) = instructionMatch.destructured
+        this += when (type.single()) {
+            'x' -> Point(count, 0)
+            'y' -> Point(0, count)
+            else -> error("Invalid coord")
+        }
     }
 
     override fun InstructionManual.solvePartOne(): SingleFoldOrigami = SingleFoldOrigami(foldPoints(1).count())
@@ -56,10 +61,12 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
 
 data class InstructionManual(val points: List<Point>, val instructions: List<Point>)
 interface Origami
+
 @JvmInline
 value class SingleFoldOrigami(val value: Int) : Origami {
     override fun toString() = value.toString()
 }
+
 @JvmInline
 value class FullyFoldedOrigami(val value: String) : Origami {
     override fun toString() = value
