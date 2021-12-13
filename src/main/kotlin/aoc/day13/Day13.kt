@@ -48,7 +48,7 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
             for (x in 0..maxOf(Point::x)) {
                 builder.append(if (Point(x, y) in this) MARKED_CHAR else UNMARKED_CHAR)
             }
-            builder.append('\n')
+            builder.appendLine()
         }
         return builder.substring(0, builder.length - 1)
     }
