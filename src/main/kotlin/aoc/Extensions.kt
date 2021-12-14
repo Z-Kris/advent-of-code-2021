@@ -24,6 +24,9 @@ inline fun <T> Iterable<T>.forEachFiltered(filter: (T) -> Boolean, action: (T) -
 
 inline fun <K> MutableMap<K, Long>.increment(key: K, count: Long) = put(key, getOrZero(key) + count)
 
+inline fun <T> Iterable<T>.requireMax() where T : Comparable<T> = requireNotNull(maxOrNull())
+inline fun <T> Iterable<T>.requireMin() where T : Comparable<T> = requireNotNull(minOrNull())
+
 inline fun <T> SortedList<T>.medianValues(): List<T> = if (size and 0x1 == 0x1) {
     listOf(get((size + 1) / 2))
 } else {

@@ -1,8 +1,6 @@
 package aoc.day14
 
-import aoc.Puzzle
-import aoc.increment
-import aoc.toCharPair
+import aoc.*
 
 /**
  * @author Kris | 14/12/2021
@@ -39,7 +37,7 @@ object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
     private fun PolymerizationEquipment.reinforce(numOfIterations: Int): Long {
         val foldedCounts = (0 until numOfIterations).foldPolymerCounts(template.toInitialPolymerCounts(), rules)
         val valueCounts = mapToCharOccurrences(foldedCounts, template.first()).values
-        return requireNotNull(valueCounts.maxOrNull()) - requireNotNull(valueCounts.minOrNull())
+        return valueCounts.requireMax() - valueCounts.requireMin()
     }
 
     override fun PolymerizationEquipment.solvePartOne(): Long = reinforce(10)
