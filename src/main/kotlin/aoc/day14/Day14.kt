@@ -10,17 +10,12 @@ import aoc.toCharPair
 @OptIn(ExperimentalStdlibApi::class)
 object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
     private val INSTRUCTION_REGEX = Regex("([A-Z]{2}) -> ([A-Z])")
-    private val TEMPLATE_REGEX = Regex("([A-Z]+)")
 
-    override fun Sequence<String>.parse(): PolymerizationEquipment {
-        val list = toList()
-        val (template) = TEMPLATE_REGEX.find(list.first())?.destructured ?: error("Invalid format.")
-        val instructions = mutableListOf<InsertionRule>()
-        list.drop(1).forEach { line ->
-            val (string, result) = INSTRUCTION_REGEX.find(line)?.destructured ?: return@forEach
-            instructions += InsertionRule(string.toCharPair(), result.single())
-        }
-        return PolymerizationEquipment(template, instructions)
+    override fun Sequence<String>.parse(): PolymerizationEquipment = with(toList()) { PolymerizationEquipment(first(), drop(2).toInstructions()) }
+
+    private fun List<String>.toInstructions() = map {
+        val (string, result) = requireNotNull(INSTRUCTION_REGEX.find(it)?.destructured)
+        InsertionRule(string.toCharPair(), result.single())
     }
 
     private operator fun List<InsertionRule>.get(pair: Pair<Char, Char>) = single { it.pair == pair }
