@@ -17,9 +17,8 @@ object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
         val (template) = TEMPLATE_REGEX.find(list.first())?.destructured ?: error("Invalid format.")
         val instructions = mutableListOf<InsertionRule>()
         list.drop(1).forEach { line ->
-            val (pair, result) = INSTRUCTION_REGEX.find(line)?.destructured ?: return@forEach
-            val (first, second) = pair.toCharPair()
-            instructions += InsertionRule(first to second, result.single())
+            val (string, result) = INSTRUCTION_REGEX.find(line)?.destructured ?: return@forEach
+            instructions += InsertionRule(string.toCharPair(), result.single())
         }
         return PolymerizationEquipment(template, instructions)
     }
