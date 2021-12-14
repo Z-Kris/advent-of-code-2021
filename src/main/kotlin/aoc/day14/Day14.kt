@@ -30,8 +30,8 @@ object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
     private fun IntRange.foldPolymerCounts(initialCounts: PolymerCounts, rules: List<InsertionRule>) = fold(initialCounts) { acc, _ ->
         buildMap {
             acc.forEach { (pair, count) ->
-                val (a, b) = pair.toList()
-                val rule = rules[a to b]
+                val (a, b) = pair
+                val rule = rules[pair]
                 increment(a to rule.result, count)
                 increment(rule.result to b, count)
             }
