@@ -12,7 +12,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     override fun Sequence<String>.parse(): Cavern = toList().map { row -> row.map(Character::getNumericValue) }
     private const val MAX_RISK = 9
     private val EXPAND_RANGE = 1 until 5
-    private val Cavern.dimensions get() = size to first().size
+    private val Cavern.dimensions: Dimensions get() = size to first().size
     private fun Cavern.validateHeight(size: Int) = require(all { it.size == size })
 
     private fun Cavern.computeRiskOfShortestPath(): Int {
@@ -47,7 +47,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
 
     private fun Point.findNeighbouringPoints() = OFFSETS.map(::merge)
     private fun Cavern.pointIndex(point: Point): Int = point.x * size + point.y
-    private operator fun Pair<Int, Int>.contains(point: Point): Boolean = let { (width, height) -> point.inBounds(width, height) }
+    private operator fun Dimensions.contains(point: Point): Boolean = let { (width, height) -> point.inBounds(width, height) }
     private operator fun BitSet.contains(pointIndex: Int): Boolean = get(pointIndex)
     private operator fun BitSet.plusAssign(pointIndex: Int) = set(pointIndex, true)
     private operator fun Cavern.get(point: Point) = this[point.x][point.y]
@@ -71,3 +71,4 @@ object Day15 : Puzzle<Cavern, Int>(15) {
 
 private typealias Cavern = List<List<Int>>
 private typealias Distances = IntArray
+private typealias Dimensions = Pair<Int, Int>
