@@ -22,7 +22,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
         val queue = PriorityQueue<Point> { a, b -> distances[a, width].compareTo(distances[b, width]) }
         initializeStart(distances, queue, width)
         pathfind(distances, queue, BitSet(width * height))
-        return distances.lastValue()
+        return distances[distances.lastIndex]
     }
 
     private fun initializeStart(distances: Distances, queue: PriorityQueue<Point>, width: Int) {
@@ -51,7 +51,6 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     private operator fun BitSet.contains(pointIndex: Int): Boolean = get(pointIndex)
     private operator fun BitSet.plusAssign(pointIndex: Int) = set(pointIndex, true)
     private operator fun Cavern.get(point: Point) = this[point.x][point.y]
-    private fun Distances.lastValue() = this[lastIndex]
     private operator fun Distances.get(point: Point, dimensions: Pair<Int, Int>) = get(point, dimensions.first)
     private operator fun Distances.get(point: Point, width: Int) = this[point.index(width)]
     private operator fun Distances.set(point: Point, dimensions: Pair<Int, Int>, value: Int) = set(point, dimensions.first, value)
