@@ -18,16 +18,16 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     private fun Cavern.computeRiskOfShortestPath(): Int {
         val (width, height) = dimensions
         validateHeight(height)
-        val distances = Array(width) { IntArray(height) { Int.MAX_VALUE } }
-        val queue = PriorityQueue<Point> { a, b -> distances[a].compareTo(distances[b]) }
-        initializeStart(distances, queue)
+        val distances = IntArray(width * height) { Int.MAX_VALUE }
+        val queue = PriorityQueue<Point> { a, b -> distances[a, width].compareTo(distances[b, width]) }
+        initializeStart(distances, queue, width)
         pathfind(distances, queue, BitSet(width * height))
         return distances.lastValue()
     }
 
-    private fun initializeStart(distances: Distances, queue: PriorityQueue<Point>) {
+    private fun initializeStart(distances: Distances, queue: PriorityQueue<Point>, width: Int) {
         queue += Point.ZERO
-        distances[Point.ZERO] = 0
+        distances[Point.ZERO, width] = 0
     }
 
     private fun Cavern.pathfind(distances: Distances, queue: PriorityQueue<Point>, visited: BitSet) {
@@ -37,9 +37,9 @@ object Day15 : Puzzle<Cavern, Int>(15) {
             visited += pointIndex(next)
             for (point in next.findNeighbouringPoints()) {
                 if (point !in dimensions || pointIndex(point) in visited) continue
-                val distance = distances[next] + this[point]
-                if (distance >= distances[point]) continue
-                distances[point] = distance
+                val distance = distances[next, dimensions] + this[point]
+                if (distance >= distances[point, dimensions]) continue
+                distances[point, dimensions] = distance
                 queue += point
             }
         }
@@ -51,10 +51,12 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     private operator fun BitSet.contains(pointIndex: Int): Boolean = get(pointIndex)
     private operator fun BitSet.plusAssign(pointIndex: Int) = set(pointIndex, true)
     private operator fun Cavern.get(point: Point) = this[point.x][point.y]
-    private fun Distances.lastValue() = this[lastIndex][last().lastIndex]
-    private operator fun Distances.get(point: Point) = this[point.x][point.y]
-    private operator fun Distances.set(point: Point, value: Int) {
-        this[point.x][point.y] = value
+    private fun Distances.lastValue() = this[lastIndex]
+    private operator fun Distances.get(point: Point, dimensions: Pair<Int, Int>) = get(point, dimensions.first)
+    private operator fun Distances.get(point: Point, width: Int) = this[point.index(width)]
+    private operator fun Distances.set(point: Point, dimensions: Pair<Int, Int>, value: Int) = set(point, dimensions.first, value)
+    private operator fun Distances.set(point: Point, width: Int, value: Int) {
+        this[point.index(width)] = value
     }
 
     private fun Cavern.expand(): Cavern = expandRight().let { EXPAND_RANGE.fold(it) { acc, step -> acc + it.expandBelow(step) } }
@@ -68,4 +70,4 @@ object Day15 : Puzzle<Cavern, Int>(15) {
 }
 
 private typealias Cavern = List<List<Int>>
-private typealias Distances = Array<IntArray>
+private typealias Distances = IntArray
