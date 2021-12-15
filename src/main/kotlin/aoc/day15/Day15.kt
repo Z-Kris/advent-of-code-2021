@@ -19,7 +19,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
         val (width, height) = dimensions
         validateHeight(height)
         val distances = Array(width) { IntArray(height) { Int.MAX_VALUE } }
-        val queue = PriorityQueue<Point>(width * height) { a, b -> distances[a].compareTo(distances[b]) }
+        val queue = PriorityQueue<Point> { a, b -> distances[a].compareTo(distances[b]) }
         initializeStart(distances, queue)
         pathfind(distances, queue, BitSet(width * height))
         return distances.lastValue()
