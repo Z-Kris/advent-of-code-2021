@@ -21,7 +21,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
         val distances = IntArray(width * height) { Int.MAX_VALUE }
         val queue = PriorityQueue<Point> { a, b -> distances[a, width].compareTo(distances[b, width]) }
         initializeStart(distances, queue, width)
-        pathfind(distances, queue, BitSet(width * height))
+        visitAll(distances, queue, BitSet(width * height))
         return distances[distances.lastIndex]
     }
 
@@ -30,7 +30,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
         distances[Point.ZERO, width] = 0
     }
 
-    private fun Cavern.pathfind(distances: Distances, queue: PriorityQueue<Point>, visited: BitSet) {
+    private fun Cavern.visitAll(distances: Distances, queue: PriorityQueue<Point>, visited: BitSet) {
         val dimensions = this.dimensions
         while (queue.isNotEmpty()) {
             val next = queue.poll()
