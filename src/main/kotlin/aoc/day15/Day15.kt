@@ -31,11 +31,12 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     }
 
     private fun Cavern.pathfind(distances: Distances, queue: PriorityQueue<Point>, visited: BitSet) {
+        val dimensions = this.dimensions
         while (queue.isNotEmpty()) {
             val next = queue.poll()
             visited += pointIndex(next)
             for (point in next.findNeighbouringPoints()) {
-                if (point !in this || pointIndex(point) in visited) continue
+                if (point !in dimensions || pointIndex(point) in visited) continue
                 val distance = distances[next] + this[point]
                 if (distance >= distances[point]) continue
                 distances[point] = distance
@@ -46,7 +47,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
 
     private fun Point.findNeighbouringPoints() = OFFSETS.map(::merge)
     private fun Cavern.pointIndex(point: Point): Int = point.x * size + point.y
-    private operator fun Cavern.contains(point: Point): Boolean = dimensions.let { (width, height) -> point.inBounds(width, height) }
+    private operator fun Pair<Int, Int>.contains(point: Point): Boolean = let { (width, height) -> point.inBounds(width, height) }
     private operator fun BitSet.contains(pointIndex: Int): Boolean = get(pointIndex)
     private operator fun BitSet.plusAssign(pointIndex: Int) = set(pointIndex, true)
     private operator fun Cavern.get(point: Point) = this[point.x][point.y]
