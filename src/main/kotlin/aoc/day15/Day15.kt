@@ -61,7 +61,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
 
     private fun Cavern.expand(): Cavern = expandRight().let { EXPAND_RANGE.fold(it) { acc, step -> acc + it.expandBelow(step) } }
     private fun Cavern.expandRight() = map { EXPAND_RANGE.fold(it) { acc, step -> acc + it.expand(step) } }
-    private fun Cavern.expandBelow(value: Int) = map { row -> row.expand(value) }
+    private fun Cavern.expandBelow(value: Int) = map { it.expand(value) }
     private fun List<Int>.expand(value: Int) = map { (it + value).wrapped }
     private val Int.wrapped get() = if (this > MAX_RISK) (this - MAX_RISK) else this
 
