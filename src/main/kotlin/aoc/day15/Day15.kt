@@ -15,7 +15,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     private val Cavern.dimensions get() = size to first().size
     private fun Cavern.validateHeight(size: Int) = require(all { it.size == size })
 
-    private fun Cavern.computeRiskOfShortestDistance(): Int {
+    private fun Cavern.computeRiskOfShortestPath(): Int {
         val (width, height) = dimensions
         validateHeight(height)
         val distances = Array(width) { IntArray(height) { Int.MAX_VALUE } }
@@ -62,8 +62,8 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     private fun List<Int>.expand(value: Int) = map { (it + value).wrapped }
     private val Int.wrapped get() = if (this > MAX_RISK) (this - MAX_RISK) else this
 
-    override fun Cavern.solvePartOne(): Int = computeRiskOfShortestDistance()
-    override fun Cavern.solvePartTwo(): Int = expand().computeRiskOfShortestDistance()
+    override fun Cavern.solvePartOne(): Int = computeRiskOfShortestPath()
+    override fun Cavern.solvePartTwo(): Int = expand().computeRiskOfShortestPath()
 }
 
 private typealias Cavern = List<List<Int>>
