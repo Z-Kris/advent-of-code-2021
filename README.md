@@ -22,4 +22,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 12: Passage Pathing](src/main/kotlin/aoc/day12/Day12.kt)         |    🌟    |    🌟    |
 | ✔ [Day 13: Transparent Origami](src/main/kotlin/aoc/day13/Day13.kt)     |    🌟    |    🌟    |
 | ✔ [Day 14: Extended Polymerization](src/main/kotlin/aoc/day14/Day14.kt) |    🌟    |    🌟    |
-| ✔ [Day 14: Chiton](src/main/kotlin/aoc/day15/Day15.kt)                  |    🌟    |    🌟    |
+| ✔ [Day 15: Chiton](src/main/kotlin/aoc/day15/Day15.kt)                  |    🌟    |    🌟    |
