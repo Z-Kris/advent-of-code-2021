@@ -45,7 +45,7 @@ object Day15 : Puzzle<Cavern, Int>(15) {
     }
 
     private fun Point.findNeighbouringPoints() = OFFSETS.map(::merge)
-    private fun Cavern.pointIndex(point: Point): Int = point.x * dimensions.first + point.y
+    private fun Cavern.pointIndex(point: Point): Int = point.x * size + point.y
     private operator fun Cavern.contains(point: Point): Boolean = dimensions.let { (width, height) -> point.inBounds(width, height) }
     private operator fun BitSet.contains(pointIndex: Int): Boolean = get(pointIndex)
     private operator fun BitSet.plusAssign(pointIndex: Int) = set(pointIndex, true)
