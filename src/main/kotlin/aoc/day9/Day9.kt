@@ -9,7 +9,6 @@ import kotlin.math.max
 /**
  * @author Kris | 09/12/2021
  */
-@OptIn(ExperimentalStdlibApi::class)
 object Day9 : Puzzle<LavaTubes, Int>(9) {
     override fun Sequence<String>.parse(): LavaTubes {
         val tubes = toList().map { it.map(Character::getNumericValue) }

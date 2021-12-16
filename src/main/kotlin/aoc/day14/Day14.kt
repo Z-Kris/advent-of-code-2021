@@ -5,7 +5,6 @@ import aoc.*
 /**
  * @author Kris | 14/12/2021
  */
-@OptIn(ExperimentalStdlibApi::class)
 object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
     private val INSTRUCTION_REGEX = Regex("([A-Z]{2}) -> ([A-Z])")
 

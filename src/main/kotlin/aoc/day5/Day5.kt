@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalStdlibApi::class)
 @file:Suppress("RemoveExplicitTypeArguments", "EXPERIMENTAL_IS_NOT_ENABLED")
 
 package aoc.day5

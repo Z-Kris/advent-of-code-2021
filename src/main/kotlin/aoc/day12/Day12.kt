@@ -23,7 +23,6 @@ object Day12 : Puzzle<NodeTree, Int>(12) {
     private const val SUCCESSFUL_PATH = 1
     private const val FAILED_PATH = 0
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun Sequence<String>.parse(): NodeTree {
         /* Use two maps to track which label matches which bit index, as we convert it to unique bits. */
         val smallBits = mutableMapOf<String, Int>()

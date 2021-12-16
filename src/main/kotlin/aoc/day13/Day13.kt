@@ -13,7 +13,6 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
     private val POINT_REGEX = Regex("(\\d+),(\\d+)")
     private val INSTRUCTION_REGEX = Regex("fold along ([xy])=(\\d+)")
 
-    @OptIn(ExperimentalStdlibApi::class)
     override fun Sequence<String>.parse(): InstructionManual =
         toList().let { lines -> InstructionManual(buildList { lines.forEach { addPoint(it) } }, buildList { lines.forEach { addInstruction(it) } }) }
 
