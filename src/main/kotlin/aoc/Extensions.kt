@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "NO_REFLECTION_IN_CLASS_PATH")
 
 package aoc
 
@@ -43,3 +43,6 @@ inline fun String.toCharPair(): Pair<Char, Char> {
 inline fun SortedList<Int>.meanValues(): List<Int> = with(sum() / size.toDouble()) {
     if (this.rem(1) == 0.0) listOf(floor(this).toInt()) else listOf(floor(this).toInt(), ceil(this).toInt())
 }
+
+inline fun <reified T> singleSealedInstance(function: (T) -> Boolean): T =
+    T::class.sealedSubclasses.firstNotNullOf { subClass -> subClass.objectInstance?.let { if (function(it)) it else null } }
