@@ -11,6 +11,7 @@ version = "1.0-SNAPSHOT"
 repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
+    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.10")
 }
 
