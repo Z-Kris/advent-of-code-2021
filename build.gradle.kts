@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
@@ -11,7 +11,7 @@ version = "1.0-SNAPSHOT"
 repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.5.10")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.10")
 }
 
 tasks.test {
@@ -19,7 +19,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
