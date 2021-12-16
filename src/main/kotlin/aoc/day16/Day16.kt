@@ -43,9 +43,8 @@ object Day16 : Puzzle<Packet, Long>(16) {
                     add(decodePacket())
                 }
             }
-            LENGTH_TYPE_REMAINING_PACKETS -> {
-                val subPacketsCount = readBits(SUB_PACKETS_COUNT_SIZE)
-                repeat(subPacketsCount) { add(decodePacket()) }
+            LENGTH_TYPE_REMAINING_PACKETS -> repeat(readBits(SUB_PACKETS_COUNT_SIZE)) {
+                add(decodePacket())
             }
         }
     }
