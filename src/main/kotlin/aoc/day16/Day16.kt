@@ -28,13 +28,10 @@ object Day16 : Puzzle<Packet, Long>(16) {
         }
     }
 
-    private fun ReadOnlyBitBuffer.decodeLiteralPacketValue(): Long {
-        var value = 0L
-        do {
-            val end = readBits(1) == 0
-            value = (value shl LITERAL_PACKET_PORTION_SIZE) or readBits(LITERAL_PACKET_PORTION_SIZE).toLong()
-        } while (!end)
-        return value
+    private tailrec fun ReadOnlyBitBuffer.decodeLiteralPacketValue(prev: Long = 0): Long {
+        val end = readBits(1) == 0
+        val value = (prev shl LITERAL_PACKET_PORTION_SIZE) or readBits(LITERAL_PACKET_PORTION_SIZE).toLong()
+        return if (end) value else decodeLiteralPacketValue(value)
     }
 
     private fun ReadOnlyBitBuffer.decodeOperatorSubPackets(): List<Packet> {
