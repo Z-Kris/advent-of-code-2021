@@ -32,7 +32,11 @@ private fun main() = puzzles.forEach { solve(it) }
 
 @ExperimentalTime
 private fun <T, R> solve(puzzle: Puzzle<T, R>) = with(puzzle) {
-    val input = parse()
+    val parseMeasurement = measureTimedValue { parse() }
+    val input = parseMeasurement.value
+    println("Day ${puzzle.day} parsing: ${parseMeasurement.duration}")
+    println()
+
     val solutionPart1 = measureTimedValue {
         input.solvePartOne()
     }
