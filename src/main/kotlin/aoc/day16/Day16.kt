@@ -34,22 +34,20 @@ object Day16 : Puzzle<Packet, Long>(16) {
         return if (end) value else decodeLiteralPacketValue(value)
     }
 
-    private fun ReadOnlyBitBuffer.decodeOperatorSubPackets(): List<Packet> {
-        val subPackets = mutableListOf<Packet>()
+    private fun ReadOnlyBitBuffer.decodeOperatorSubPackets(): List<Packet> = buildList {
         when (readBits(LENGTH_TYPE_SIZE)) {
             LENGTH_TYPE_REMAINING_BITS -> {
                 val subPacketsBitCount = readBits(SUB_PACKETS_BITS_SIZE)
                 val stopAt = remaining() - subPacketsBitCount
                 while (remaining() > stopAt) {
-                    subPackets += decodePacket()
+                    add(decodePacket())
                 }
             }
             LENGTH_TYPE_REMAINING_PACKETS -> {
                 val subPacketsCount = readBits(SUB_PACKETS_COUNT_SIZE)
-                repeat(subPacketsCount) { subPackets += decodePacket() }
+                repeat(subPacketsCount) { add(decodePacket()) }
             }
         }
-        return subPackets
     }
 
     override fun Packet.solvePartOne(): Long = versionSum
