@@ -18,7 +18,7 @@ object Day17 : Puzzle<TargetArea, Int>(17) {
             .map(String::toInt)
             .let { (startX, endX, startY, endY) -> TargetArea(startX, endX, startY, endY) }
 
-    override fun TargetArea.solvePartOne(): Int = abs(minY).let { absMin -> absMin * (absMin - 1) / 2 }
+    override fun TargetArea.solvePartOne(): Int = abs(minY).let(Int::decrementingSum)
     override fun TargetArea.solvePartTwo(): Int = (0..maxX).sumOf { x ->
         (minY until -minY).count { y ->
             Velocity(x, y) in this
@@ -51,3 +51,4 @@ data class FlightStep(val position: Int, val velocity: Int)
 
 private val FlightStep.progressX get() = FlightStep(position + velocity, velocity - velocity.sign)
 private val FlightStep.progressY get() = FlightStep(position + velocity, velocity - 1)
+private val Int.decrementingSum get() = this * (this - 1) / 2
