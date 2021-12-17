@@ -24,3 +24,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 14: Extended Polymerization](src/main/kotlin/aoc/day14/Day14.kt) |    🌟    |    🌟    |
 | ✔ [Day 15: Chiton](src/main/kotlin/aoc/day15/Day15.kt)                  |    🌟    |    🌟    |
 | ✔ [Day 16: Packet Decoder](src/main/kotlin/aoc/day16/Day16.kt)          |    🌟    |    🌟    |
+| ✔ [Day 17: Trick Shot](src/main/kotlin/aoc/day17/Day17.kt)              |    🌟    |    🌟    |
