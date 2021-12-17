@@ -31,6 +31,8 @@ val OFFSETS = listOf(Point(0, 1), Point(0, -1), Point(1, 0), Point(-1, 0))
 infix fun Int.greaterThanOrEqual(other: Int) = this >= other
 infix fun Int.lesserThanOrEqual(other: Int) = this <= other
 
+inline val Int.gaussSum get() = this * (this + 1) / 2
+
 inline fun <T> SortedList<T>.medianValues(): List<T> = if (size and 0x1 == 0x1) {
     listOf(get((size + 1) / 2))
 } else {

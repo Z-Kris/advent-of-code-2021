@@ -14,8 +14,7 @@ object Day7 : Puzzle<Crabs, Int>(7) {
     private inline fun Crabs.sum(position: Int, transformer: FuelTransformer) = sumOf { transformer(abs(it - position)) }
 
     override fun Crabs.solvePartOne() = minSumOf(medianValues(), Int::self)
-    override fun Crabs.solvePartTwo() = minSumOf(meanValues(), Int::incrementingSum)
+    override fun Crabs.solvePartTwo() = minSumOf(meanValues(), Int::gaussSum)
 }
-private val Int.incrementingSum get() = this * (this + 1) / 2
 private typealias FuelTransformer = (distance: Int) -> Int
 private typealias Crabs = SortedList<Int>
