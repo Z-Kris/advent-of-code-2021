@@ -33,20 +33,21 @@ data class TargetArea(val minX: Int, val maxX: Int, val minY: Int, val maxY: Int
     operator fun contains(point: Point) = point.x in xRange && point.y in yRange
 
     operator fun contains(velocity: Velocity): Boolean {
-        val xVelocitySequence = velocity.xVelocity.sequence(Int::progressXVelocity)
-        val yVelocitySequence = velocity.yVelocity.sequence(Int::progressYVelocity)
+        val xVelocitySequence = velocity.xVelocity.velocitySequence(FlightStep::progressX)
+        val yVelocitySequence = velocity.yVelocity.velocitySequence(FlightStep::progressY)
         val validXPositions = xVelocitySequence.takeWhile { (pos, _) -> pos <= maxX }
         val validYPositions = yVelocitySequence.takeWhile { (pos, _) -> pos >= minY }
         return validXPositions
-            .zip(validYPositions) { xPos, yPos -> Point(xPos.first, yPos.first) }
+            .zip(validYPositions) { xPos, yPos -> Point(xPos.position, yPos.position) }
             .any { it in this }
     }
 
-    private fun Int.sequence(velocityFunction: (pos: Int, velocity: Int) -> Pair<Int, Int>) =
-        generateSequence(0 to this) { (pos, velocity) -> velocityFunction(pos, velocity) }
+    private fun Int.velocitySequence(velocityFunction: (FlightStep) -> FlightStep) =
+        generateSequence(FlightStep(0, this), velocityFunction::invoke)
 }
 
 data class Velocity(val xVelocity: Int, val yVelocity: Int)
+data class FlightStep(val position: Int, val velocity: Int)
 
-private fun Int.progressXVelocity(velocity: Int) = this + velocity to velocity - velocity.sign
-private fun Int.progressYVelocity(velocity: Int) = this + velocity to velocity - 1
+private val FlightStep.progressX get() = FlightStep(position + velocity, velocity - velocity.sign)
+private val FlightStep.progressY get() = FlightStep(position + velocity, velocity - 1)
