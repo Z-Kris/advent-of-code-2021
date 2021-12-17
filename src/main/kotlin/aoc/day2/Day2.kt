@@ -12,9 +12,9 @@ object Day2 : Puzzle<List<String>, Long>(2) {
     override fun Sequence<String>.parse() = toList()
 
     override fun List<String>.solvePartOne(): Long {
-        val forwardSum = sumOf(Regex("$FORWARD (\\d+)"))
-        val upSum = sumOf(Regex("$UP (\\d+)"))
-        val downSum = sumOf(Regex("$DOWN (\\d+)"))
+        val forwardSum = sumOf(Regex("""$FORWARD (\d+)"""))
+        val upSum = sumOf(Regex("""$UP (\d+)"""))
+        val downSum = sumOf(Regex("""$DOWN (\d+)"""))
         return forwardSum.toLong() * (downSum - upSum)
     }
 

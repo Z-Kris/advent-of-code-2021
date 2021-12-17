@@ -10,8 +10,8 @@ import kotlin.math.abs
 object Day13 : Puzzle<InstructionManual, Origami>(13) {
     private const val MARKED_CHAR = '█'
     private const val UNMARKED_CHAR = ' '
-    private val POINT_REGEX = Regex("(\\d+),(\\d+)")
-    private val INSTRUCTION_REGEX = Regex("fold along ([xy])=(\\d+)")
+    private val POINT_REGEX = Regex("""(\d+),(\d+)""")
+    private val INSTRUCTION_REGEX = Regex("""fold along ([xy])=(\d+)""")
 
     override fun Sequence<String>.parse(): InstructionManual =
         toList().let { lines -> InstructionManual(buildList { lines.forEach { addPoint(it) } }, buildList { lines.forEach { addInstruction(it) } }) }

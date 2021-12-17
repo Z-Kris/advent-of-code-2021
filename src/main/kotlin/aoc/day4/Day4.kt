@@ -9,7 +9,7 @@ object Day4 : Puzzle<Bingo, Long>(4) {
     private const val DIMENSION = 5
     private val RANGE = 0 until DIMENSION
     private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
-    private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("\\s+")).map(String::toInt)
+    private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("""\s+""")).map(String::toInt)
 
     override fun Sequence<String>.parse(): Bingo = with(toMutableList().apply { removeIf(String::isEmpty) }) {
         val winningNumbers = removeFirst().split(',').map(String::toInt)

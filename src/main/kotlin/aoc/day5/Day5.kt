@@ -14,7 +14,7 @@ import kotlin.math.sign
  */
 @Suppress("NOTHING_TO_INLINE")
 object Day5 : Puzzle<HydrothermalVenture, Int>(5) {
-    private val REGEX = Regex("(\\d+),(\\d+) -> (\\d+),(\\d+)")
+    private val REGEX = Regex("""(\d+),(\d+) -> (\d+),(\d+)""")
 
     override fun Sequence<String>.parse(): HydrothermalVenture {
         val lines = toList().getLines()
