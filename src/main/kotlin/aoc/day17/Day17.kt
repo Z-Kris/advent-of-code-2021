@@ -2,6 +2,8 @@ package aoc.day17
 
 import aoc.Point
 import aoc.Puzzle
+import aoc.greaterThanOrEqual
+import aoc.lesserThanOrEqual
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -33,14 +35,13 @@ data class TargetArea(val minX: Int, val maxX: Int, val minY: Int, val maxY: Int
     operator fun contains(point: Point) = point.x in xRange && point.y in yRange
 
     operator fun contains(velocity: Velocity): Boolean {
-        val xVelocitySequence = velocity.xVelocity.velocitySequence(FlightStep::progressX)
-        val yVelocitySequence = velocity.yVelocity.velocitySequence(FlightStep::progressY)
-        val validXPositions = xVelocitySequence.takeWhile { (pos, _) -> pos <= maxX }
-        val validYPositions = yVelocitySequence.takeWhile { (pos, _) -> pos >= minY }
-        return validXPositions
-            .zip(validYPositions) { xPos, yPos -> Point(xPos.position, yPos.position) }
-            .any { it in this }
+        val validXPositions = velocity.xVelocity.flightSequence(FlightStep::progressX, maxX::greaterThanOrEqual)
+        val validYPositions = velocity.yVelocity.flightSequence(FlightStep::progressY, minY::lesserThanOrEqual)
+        return validXPositions.zip(validYPositions, ::toPoint).any { it in this }
     }
+
+    private fun Int.flightSequence(stepTransformer: (FlightStep) -> FlightStep, predicate: (pos: Int) -> Boolean) =
+        velocitySequence(stepTransformer).takeWhile { predicate(it.position) }
 
     private fun Int.velocitySequence(velocityFunction: (FlightStep) -> FlightStep) =
         generateSequence(FlightStep(0, this), velocityFunction::invoke)
@@ -51,4 +52,5 @@ data class FlightStep(val position: Int, val velocity: Int)
 
 private val FlightStep.progressX get() = FlightStep(position + velocity, velocity - velocity.sign)
 private val FlightStep.progressY get() = FlightStep(position + velocity, velocity - 1)
+private fun toPoint(xFlightStep: FlightStep, yFlightStep: FlightStep) = Point(xFlightStep.position, yFlightStep.position)
 private val Int.decrementingSum get() = this * (this - 1) / 2
