@@ -8,7 +8,7 @@ import kotlin.math.sign
  * @author Kris | 17/12/2021
  */
 object Day17 : Puzzle<TargetArea, Int>(17) {
-    private val TARGET_AREA_REGEX = Regex("""target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)""")
+    private val TARGET_AREA_REGEX = Regex("""target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)""")
 
     override fun Sequence<String>.parse(): TargetArea =
         requireNotNull(TARGET_AREA_REGEX.matchEntire(single()))
