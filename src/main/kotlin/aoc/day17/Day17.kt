@@ -29,15 +29,12 @@ object Day17 : Puzzle<TargetArea, Int>(17) {
 }
 
 data class TargetArea(val minX: Int, val maxX: Int, val minY: Int, val maxY: Int) {
-    private val xRange = minX..maxX
-    private val yRange = minY..maxY
-
-    operator fun contains(point: Point) = point.x in xRange && point.y in yRange
+    private operator fun contains(point: Point) = point.x in minX..maxX && point.y in minY..maxY
 
     operator fun contains(velocity: Velocity): Boolean {
         val validXPositions = velocity.xVelocity.flightSequence(FlightStep::progressX, maxX::greaterThanOrEqual)
         val validYPositions = velocity.yVelocity.flightSequence(FlightStep::progressY, minY::lesserThanOrEqual)
-        return validXPositions.zip(validYPositions, ::toPoint).any { it in this }
+        return validXPositions.zip(validYPositions, ::toPoint).any(::contains)
     }
 
     private fun Int.flightSequence(stepTransformer: (FlightStep) -> FlightStep, predicate: (pos: Int) -> Boolean) =
