@@ -78,7 +78,7 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
         noinline sideNode: PairNode.() -> Node,
         edgeNumber: Node.() -> NumberNode
     ) {
-        val parent = firstNonSideParent(startingNode, sideNode) ?: return
+        val parent = firstParent(startingNode, sideNode) ?: return
         val side = sideNode()
         require(side is NumberNode)
         parent.sideNode().edgeNumber().value += side.value
@@ -90,9 +90,9 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
         return next().edgeNumber(next)
     }
 
-    private tailrec fun Node.firstNonSideParent(startingNode: Node, side: PairNode.() -> Node): PairNode? {
+    private tailrec fun Node.firstParent(startingNode: Node, side: PairNode.() -> Node): PairNode? {
         val parent = findParent(startingNode) ?: return null
-        return if (parent.side() != this) parent else parent.firstNonSideParent(startingNode, side)
+        return if (parent.side() != this) parent else parent.firstParent(startingNode, side)
     }
 
     private fun mergeAndReduce(left: Node, right: Node) = left.plus(right).reduced()
