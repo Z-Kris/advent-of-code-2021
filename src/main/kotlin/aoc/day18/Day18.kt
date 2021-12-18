@@ -59,21 +59,19 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
     )
 
     private fun PairNode.explode(startingNode: Node) {
-        explode(startingNode, PairNode::left) { findNumberNode(PairNode::right) }
-        explode(startingNode, PairNode::right) { findNumberNode(PairNode::left) }
+        findImpactedSideNode(startingNode, PairNode::left)?.findNumberNode(PairNode::right)?.add(left as NumberNode)
+        findImpactedSideNode(startingNode, PairNode::right)?.findNumberNode(PairNode::left)?.add(right as NumberNode)
         requireNotNull(findParent(startingNode)).replaceNode(this, NumberNode(0))
     }
 
-    private inline fun PairNode.explode(
-        startingNode: Node,
-        noinline sideNode: PairNode.() -> Node,
-        numberNode: Node.() -> NumberNode
-    ) {
-        val parent = firstParent(startingNode, sideNode) ?: return
-        val side = sideNode()
-        require(side is NumberNode)
-        parent.sideNode().numberNode().value += side.value
+    private fun NumberNode.add(numberNode: NumberNode) {
+        value += numberNode.value
     }
+
+    private fun PairNode.findImpactedSideNode(
+        startingNode: Node,
+        sideNode: PairNode.() -> Node,
+    ): Node? = firstParent(startingNode, sideNode)?.sideNode()
 
     private tailrec fun Node.findNumberNode(next: (PairNode).() -> Node): NumberNode {
         if (this is NumberNode) return this
