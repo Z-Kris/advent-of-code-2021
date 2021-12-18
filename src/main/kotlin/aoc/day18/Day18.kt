@@ -48,7 +48,7 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
     private fun Node.findParent(startingNode: Node): PairNode? {
         if (startingNode !is PairNode) return null
         if (this == startingNode.left || this == startingNode.right) return startingNode
-        return findParent(startingNode.left) ?: findParent(startingNode.right)
+        return startingNode.firstNotNullOfOrNull { findParent(it) }
     }
 
     private fun NumberNode.split(startingNode: Node) =
