@@ -59,8 +59,8 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
     )
 
     private fun PairNode.explode(startingNode: Node) {
-        findImpactedSideNode(startingNode, PairNode::left)?.findNumberNode(PairNode::right)?.add(left as NumberNode)
-        findImpactedSideNode(startingNode, PairNode::right)?.findNumberNode(PairNode::left)?.add(right as NumberNode)
+        firstParentWithout(startingNode, PairNode::left)?.left?.findNumberNode(PairNode::right)?.add(left as NumberNode)
+        firstParentWithout(startingNode, PairNode::right)?.right?.findNumberNode(PairNode::left)?.add(right as NumberNode)
         requireNotNull(findParent(startingNode)).replaceNode(this, NumberNode(0))
     }
 
@@ -68,20 +68,15 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
         value += numberNode.value
     }
 
-    private fun PairNode.findImpactedSideNode(
-        startingNode: Node,
-        sideNode: PairNode.() -> Node,
-    ): Node? = firstParent(startingNode, sideNode)?.sideNode()
-
     private tailrec fun Node.findNumberNode(next: (PairNode).() -> Node): NumberNode {
         if (this is NumberNode) return this
         require(this is PairNode)
         return next().findNumberNode(next)
     }
 
-    private tailrec fun Node.firstParent(startingNode: Node, side: PairNode.() -> Node): PairNode? {
+    private tailrec fun Node.firstParentWithout(startingNode: Node, side: PairNode.() -> Node): PairNode? {
         val parent = findParent(startingNode) ?: return null
-        return if (parent.side() != this) parent else parent.firstParent(startingNode, side)
+        return if (parent.side() != this) parent else parent.firstParentWithout(startingNode, side)
     }
 
     private fun mergeAndReduce(left: Node, right: Node) = left.plus(right).reduced()
