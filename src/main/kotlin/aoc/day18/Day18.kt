@@ -1,6 +1,7 @@
 package aoc.day18
 
 import aoc.Puzzle
+import aoc.runIfNotNull
 import java.io.Reader
 import java.io.StringReader
 import kotlin.math.ceil
@@ -29,27 +30,18 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
 
     private val Reader.nextChar: Char? get() = read().let { if (it == -1) null else it.toChar() }
 
-    private fun <T : Node> Node.firstOrNull(depth: Int = 0, function: Node.(depth: Int) -> T?): T? {
-        val result = function(depth)
-        if (result != null) return result
-        if (this !is PairNode) return null
-        return left.firstOrNull(depth.inc(), function) ?: right.firstOrNull(depth.inc(), function)
+    private fun Node.findNextExplodingNode(depth: Int = 0): PairNode? = when (this) {
+        is PairNode -> if (depth == THRESHOLD_DEPTH) this else firstNotNullOfOrNull { it.findNextExplodingNode(depth.inc()) }
+        else -> null
     }
 
-    private fun Node.findNextExplodingNode() = firstOrNull { depth -> if (this is PairNode && depth == THRESHOLD_DEPTH) this else null }
-    private fun Node.findNextSplittingNode() = firstOrNull { if (this is NumberNode && value >= SPLIT_THRESHOLD) this else null }
-
-    private fun Node.nextExplosion(): Boolean {
-        val explodingNode = findNextExplodingNode() ?: return false
-        explodingNode.explode(this)
-        return true
+    private fun Node.findNextSplittingNode(): NumberNode? = when (this) {
+        is NumberNode -> if (value >= SPLIT_THRESHOLD) this else null
+        is PairNode -> firstNotNullOfOrNull { it.findNextSplittingNode() }
     }
 
-    private fun Node.nextSplit(): Boolean {
-        val splittingNode = findNextSplittingNode() ?: return false
-        splittingNode.split(this)
-        return true
-    }
+    private fun Node.nextExplosion(): Boolean = runIfNotNull(findNextExplodingNode()) { it.explode(this) }
+    private fun Node.nextSplit(): Boolean = runIfNotNull(findNextSplittingNode()) { it.split(this) }
 
     private tailrec fun Node.reduced(): Node = if (nextExplosion() || nextSplit()) reduced() else this
 
@@ -59,13 +51,13 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
         return findParent(startingNode.left) ?: findParent(startingNode.right)
     }
 
-    private fun NumberNode.split(startingNode: Node) {
-        val split = PairNode(
-            NumberNode(floor(value / 2.0).toInt()),
-            NumberNode(ceil(value / 2.0).toInt())
-        )
-        requireNotNull(findParent(startingNode)).replaceNode(this, split)
-    }
+    private fun NumberNode.split(startingNode: Node) =
+        requireNotNull(findParent(startingNode)).replaceNode(this, splitToPairNode())
+
+    private fun NumberNode.splitToPairNode() = PairNode(
+        NumberNode(floor(value / 2.0).toInt()),
+        NumberNode(ceil(value / 2.0).toInt())
+    )
 
     private fun PairNode.explode(startingNode: Node) {
         explode(startingNode, PairNode::left) { edgeNumber(PairNode::right) }
@@ -128,11 +120,13 @@ class NumberNode(var value: Int) : Node() {
     override fun toString() = value.toString()
 }
 
-class PairNode(var left: Node, var right: Node) : Node() {
+class PairNode(var left: Node, var right: Node) : Node(), Iterable<Node> {
     override val magnitude: Int get() = left.magnitude * 3 + right.magnitude * 2
     override fun copy(): Node = PairNode(left.copy(), right.copy())
     override fun toString() = "[$left, $right]"
 
     fun replaceNode(nodeToFind: Node, replacement: Node) =
         if (left === nodeToFind) this::left.set(replacement) else this::right.set(replacement)
+
+    override fun iterator(): Iterator<Node> = sequenceOf(left, right).iterator()
 }
