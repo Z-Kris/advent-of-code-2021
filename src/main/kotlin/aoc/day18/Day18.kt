@@ -51,7 +51,7 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
         return true
     }
 
-    private fun Node.reduced(): Node = if (nextExplosion() || nextSplit()) reduced() else this
+    private tailrec fun Node.reduced(): Node = if (nextExplosion() || nextSplit()) reduced() else this
 
     private fun Node.findParent(startingNode: Node): PairNode? {
         if (startingNode !is PairNode) return null
