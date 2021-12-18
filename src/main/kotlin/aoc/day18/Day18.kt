@@ -59,26 +59,26 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
     )
 
     private fun PairNode.explode(startingNode: Node) {
-        explode(startingNode, PairNode::left) { edgeNumber(PairNode::right) }
-        explode(startingNode, PairNode::right) { edgeNumber(PairNode::left) }
+        explode(startingNode, PairNode::left) { findNumberNode(PairNode::right) }
+        explode(startingNode, PairNode::right) { findNumberNode(PairNode::left) }
         requireNotNull(findParent(startingNode)).replaceNode(this, NumberNode(0))
     }
 
     private inline fun PairNode.explode(
         startingNode: Node,
         noinline sideNode: PairNode.() -> Node,
-        edgeNumber: Node.() -> NumberNode
+        numberNode: Node.() -> NumberNode
     ) {
         val parent = firstParent(startingNode, sideNode) ?: return
         val side = sideNode()
         require(side is NumberNode)
-        parent.sideNode().edgeNumber().value += side.value
+        parent.sideNode().numberNode().value += side.value
     }
 
-    private tailrec fun Node.edgeNumber(next: (PairNode).() -> Node): NumberNode {
+    private tailrec fun Node.findNumberNode(next: (PairNode).() -> Node): NumberNode {
         if (this is NumberNode) return this
         require(this is PairNode)
-        return next().edgeNumber(next)
+        return next().findNumberNode(next)
     }
 
     private tailrec fun Node.firstParent(startingNode: Node, side: PairNode.() -> Node): PairNode? {
