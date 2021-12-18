@@ -11,6 +11,7 @@ import aoc.day14.Day14
 import aoc.day15.Day15
 import aoc.day16.Day16
 import aoc.day17.Day17
+import aoc.day18.Day18
 import aoc.day2.Day2
 import aoc.day3.Day3
 import aoc.day4.Day4
@@ -26,7 +27,7 @@ import kotlin.time.measureTimedValue
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9, Day10, Day11, Day12, Day13, Day14, Day15, Day16, Day17)
+private val puzzles = listOf(Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9, Day10, Day11, Day12, Day13, Day14, Day15, Day16, Day17, Day18)
 
 @ExperimentalTime
 private fun main() = puzzles.forEach { solve(it) }
