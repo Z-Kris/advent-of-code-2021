@@ -19,14 +19,40 @@ inline operator fun String.minus(regex: Regex) = replace(regex, "")
 inline fun <T> List<T>.concatenate() = joinToString(separator = "")
 
 inline fun <K> Map<K, Long>.getOrZero(key: K) = getOrDefault(key, 0)
+inline fun <K> Map<K, Int>.getOrZero(key: K) = getOrDefault(key, 0)
 
 inline fun <T> Iterable<T>.forEachFiltered(filter: (T) -> Boolean, action: (T) -> Unit) = forEach { element -> if (filter(element)) action(element) }
 
 inline fun <K> MutableMap<K, Long>.increment(key: K, count: Long) = put(key, getOrZero(key) + count)
+inline fun <K> MutableMap<K, Int>.increment(key: K, count: Int) = put(key, getOrZero(key) + count)
 
 inline fun <T> Iterable<T>.requireMax() where T : Comparable<T> = requireNotNull(maxOrNull())
 inline fun <T> Iterable<T>.requireMin() where T : Comparable<T> = requireNotNull(minOrNull())
 val OFFSETS = listOf(Point(0, 1), Point(0, -1), Point(1, 0), Point(-1, 0))
+inline fun <T, R> Iterable<T>.permutationSearch(other: Iterable<T>, consumer: (a: T, b: T) -> R?): R? {
+    for (a in this) {
+        for (b in other) {
+            val result = consumer(a, b)
+            if (result != null) return result
+        }
+    }
+    return null
+}
+
+inline fun Sequence<String>.chunkedBy(selector: (String) -> Boolean): List<List<String>> = buildList {
+    val iterator = this@chunkedBy.iterator()
+    val entries = mutableListOf<String>()
+    while (iterator.hasNext()) {
+        val line = iterator.next()
+        if (selector(line)) {
+            add(entries.toList())
+            entries.clear()
+            continue
+        }
+        entries += line
+    }
+    if (entries.isNotEmpty()) add(entries.toList())
+}
 
 infix fun Int.greaterThanOrEqual(other: Int) = this >= other
 infix fun Int.lesserThanOrEqual(other: Int) = this <= other
