@@ -64,7 +64,7 @@ object Day19 : Puzzle<List<Scan>, Int>(19) {
 }
 
 data class Scan(private val scrambledBeacons: List<Vec3i>) : List<Vec3i> by scrambledBeacons {
-    val variations by lazy {
+    val variations by lazy(LazyThreadSafetyMode.NONE) {
         buildList {
             for (orientation in 0 until ORIENTATIONS) {
                 for (rotation in 0 until ROTATIONS) {
