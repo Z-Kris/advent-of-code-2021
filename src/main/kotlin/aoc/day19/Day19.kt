@@ -56,7 +56,7 @@ object Day19 : Puzzle<List<Scan>, Int>(19) {
     private fun Scan.offsetVector(other: Scan): Vec3i? {
         val distanceToCount = mutableMapOf<Int, Int>()
         return permutationSearch(other) { beacon, otherBeacon ->
-            val distance = beacon.squaredDistanceOfDifference(otherBeacon)
+            val distance = beacon.squaredDifferenceOfDistance(otherBeacon)
             val prevCount = distanceToCount.increment(distance, 1) ?: return@permutationSearch null
             if (prevCount >= BEACON_THRESHOLD - 1) otherBeacon - beacon else null
         }

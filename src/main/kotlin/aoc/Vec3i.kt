@@ -28,7 +28,7 @@ data class Vec3i(val x: Int, val y: Int, val z: Int) {
     }
 
     fun manhattanDistance(other: Vec3i): Int = abs(other.x - x) + abs(other.y - y) + abs(other.z - z)
-    fun squaredDistanceOfDifference(other: Vec3i): Int {
+    fun squaredDifferenceOfDistance(other: Vec3i): Int {
         val diffX = other.x - x
         val diffY = other.y - y
         val diffZ = other.z - z
