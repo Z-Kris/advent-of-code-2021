@@ -70,6 +70,6 @@ object Day20 : Puzzle<TrenchMap, Int>(20) {
 private typealias ImageEnhancement = BitSet
 private typealias Grid = BitSet
 
-data class TrenchMap(val imageEnhancement: ImageEnhancement, val size: Int, val grid: BitSet) {
+data class TrenchMap(val imageEnhancement: ImageEnhancement, val size: Int, val grid: Grid) {
     val litBorder get() = imageEnhancement.get(0)
 }
