@@ -13,6 +13,7 @@ inline fun <T> T.chainRepeat(times: Int, action: (Int) -> Unit): T {
     return this // Return itself to allow for chained code without the use of apply and the likes.
 }
 inline val <T> T.self: T get() = this
+inline val Boolean.toInt get() = if (this) 1 else 0
 
 inline operator fun String.minus(regex: Regex) = replace(regex, "")
 
