@@ -4,6 +4,7 @@ package aoc
 
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.reflect.KClass
 
 /**
  * @author Kris | 07/12/2021
@@ -85,5 +86,4 @@ inline fun SortedList<Int>.meanValues(): List<Int> = with(sum() / size.toDouble(
 inline fun <reified T> singleSealedInstance(function: (T) -> Boolean): T =
     T::class.sealedSubclasses.firstNotNullOf { subClass -> subClass.objectInstance?.let { if (function(it)) it else null } }
 
-@Suppress("ConvertLambdaToReference")
-inline fun <reified T> sealedClassInstances(): List<T> = T::class.sealedSubclasses.mapNotNull { it.objectInstance }
+inline fun <reified T : Any> sealedClassInstances(): List<T> = T::class.sealedSubclasses.mapNotNull(KClass<out T>::objectInstance)
