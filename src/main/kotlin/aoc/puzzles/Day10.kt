@@ -8,7 +8,7 @@ import aoc.minus
 object Day10 : Puzzle<List<String>, Long>(10) {
     private val ILLEGAL_CHUNKS = Regex("""(?:\(([}\]>])|\[([})>])|\{([])>])|<([}\])]))+""")
     private val VALID_CHUNKS = Regex("""(?:\[]|\(\)|<>|\{})+""")
-    override fun Sequence<String>.parse(): List<String> = toList()
+    override fun List<String>.parse(): List<String> = this
 
     private tailrec fun String.replaceInvalidChunks(): String {
         val replaced = this - VALID_CHUNKS

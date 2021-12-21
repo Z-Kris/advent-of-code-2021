@@ -1,17 +1,15 @@
 package aoc.puzzles
 
-import java.io.FileNotFoundException
-
 /**
- * Base puzzle class, more or less a copy of Graham's puzzle as this is my first time doing AoC and I don't know what to expect from the exercises (:
  * @author Kris | 05/12/2021
  */
 sealed class Puzzle<T, R>(val day: Int) {
     fun parse(): T = Puzzle::class.java.getResourceAsStream("day $day.txt").use { inputStream ->
-        inputStream?.bufferedReader()?.useLines { it.parse() } ?: throw FileNotFoundException()
+        requireNotNull(inputStream) { "File not found." }
+        inputStream.bufferedReader().readLines().parse()
     }
-    fun parse(input: String): T = input.splitToSequence('\n').parse()
-    abstract fun Sequence<String>.parse(): T
+    fun parse(input: String): T = input.split('\n').parse()
+    abstract fun List<String>.parse(): T
     abstract fun T.solvePartOne(): R
     abstract fun T.solvePartTwo(): R
 }

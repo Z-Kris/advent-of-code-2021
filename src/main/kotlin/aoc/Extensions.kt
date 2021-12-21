@@ -41,7 +41,7 @@ inline fun <T, R> Iterable<T>.permutationSearch(other: Iterable<T>, consumer: (a
     return null
 }
 
-inline fun Sequence<String>.chunkedBy(selector: (String) -> Boolean): List<List<String>> = buildList {
+inline fun Iterable<String>.chunkedBy(selector: (String) -> Boolean): List<List<String>> = buildList {
     val iterator = this@chunkedBy.iterator()
     val entries = mutableListOf<String>()
     while (iterator.hasNext()) {

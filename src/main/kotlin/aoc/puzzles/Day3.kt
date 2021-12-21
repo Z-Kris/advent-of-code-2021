@@ -4,7 +4,7 @@ package aoc.puzzles
  * @author Kris | 05/12/2021
  */
 object Day3 : Puzzle<List<Int>, Long>(3) {
-    override fun Sequence<String>.parse() = map { it.toInt(2) }.toList()
+    override fun List<String>.parse() = map { it.toInt(2) }
 
     override fun List<Int>.solvePartOne(): Long {
         val counts = getBitCounts(getHighestEnabledBitIndex())
@@ -33,7 +33,7 @@ object Day3 : Puzzle<List<Int>, Long>(3) {
 
     private tailrec fun MutableList<Int>.getRating(bitIndex: Int, predicate: (remainingValues: List<Int>, value: Int) -> Boolean): Long {
         val bitValue = if (predicate(this, getBitCount(bitIndex))) 1 else 0
-        removeIf { it ushr bitIndex and 0x1 != bitValue }
+        removeAll { it ushr bitIndex and 0x1 != bitValue }
         require(this.isNotEmpty()) { "No valid values remaining." }
         require(bitIndex >= 0) { "Out of bounds" }
         return if (size == 1) first().toLong() else getRating(bitIndex - 1, predicate)

@@ -13,9 +13,7 @@ object Day20 : Puzzle<TrenchMap, Int>(20) {
     private val NEIGHBOUR_RANGE = -1..1
     private val NEIGHBOUR_POINTS = NEIGHBOUR_RANGE.flatMap { x -> NEIGHBOUR_RANGE.map { y -> Point(x, y) } }
 
-    override fun Sequence<String>.parse(): TrenchMap = toList().let { list ->
-        list.drop(2).toTrenchMap(list.first().toImageEnhancement())
-    }
+    override fun List<String>.parse(): TrenchMap = drop(2).toTrenchMap(first().toImageEnhancement())
 
     private fun String.toImageEnhancement(): ImageEnhancement = ImageEnhancement(length).apply {
         forEachIndexed { index, c -> if (c == LIT_BIT) set(index) }

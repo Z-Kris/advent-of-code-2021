@@ -9,7 +9,7 @@ object Day19 : Puzzle<List<Scan>, Int>(19) {
     private val VALID_COORDINATE_REGEX = Regex("""(-?\d+),(-?\d+),(-?\d+)""")
     private const val BEACON_THRESHOLD = 12
 
-    override fun Sequence<String>.parse(): List<Scan> = chunkedBy(String::isEmpty).map { groupOfLines ->
+    override fun List<String>.parse(): List<Scan> = chunkedBy(String::isEmpty).map { groupOfLines ->
         val beacons = groupOfLines.mapNotNull { line ->
             val match = VALID_COORDINATE_REGEX.matchEntire(line) ?: return@mapNotNull null
             val (x, y, z) = match.groupValues.drop(1).map(String::toInt)

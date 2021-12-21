@@ -12,7 +12,7 @@ object Day6 : Puzzle<LanternfishSchool, Long>(6) {
     private const val RESET_AGE = 6
     private fun List<LanternfishAge>.toAgeCounts() = toSet().associateWith(this::countOf).toArray()
     private fun LanternfishCountMap.toArray() = LanternfishSchool(NEWBORN_AGE + 1, ::getOrZero)
-    override fun Sequence<String>.parse() = single().split(',').map(String::toInt).toAgeCounts()
+    override fun List<String>.parse() = single().split(',').map(String::toInt).toAgeCounts()
 
     override fun LanternfishSchool.solvePartOne() = calculateProgression(80)
     override fun LanternfishSchool.solvePartTwo() = calculateProgression(256)

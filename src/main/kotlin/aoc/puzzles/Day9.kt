@@ -9,8 +9,8 @@ import kotlin.math.max
  * @author Kris | 09/12/2021
  */
 object Day9 : Puzzle<LavaTubes, Int>(9) {
-    override fun Sequence<String>.parse(): LavaTubes {
-        val tubes = toList().map { it.map(Character::getNumericValue) }
+    override fun List<String>.parse(): LavaTubes {
+        val tubes = map { it.map(Character::getNumericValue) }
         val maxRow = tubes.size
         val maxCol = tubes.first().size
         require(tubes.all { it.size == maxCol })

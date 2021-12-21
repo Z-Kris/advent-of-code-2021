@@ -15,8 +15,8 @@ import kotlin.math.sign
 object Day5 : Puzzle<HydrothermalVenture, Int>(5) {
     private val REGEX = Regex("""(\d+),(\d+) -> (\d+),(\d+)""")
 
-    override fun Sequence<String>.parse(): HydrothermalVenture {
-        val lines = toList().getLines()
+    override fun List<String>.parse(): HydrothermalVenture {
+        val lines = getLines()
         val dimension = lines.maxOf(Line::highestCoord)
         return HydrothermalVenture(lines, dimension + 1)
     }

@@ -7,7 +7,7 @@ object Day2 : Puzzle<List<String>, Long>(2) {
     private val UP = Instruction("up")
     private val DOWN = Instruction("down")
     private val FORWARD = Instruction("forward")
-    override fun Sequence<String>.parse() = toList()
+    override fun List<String>.parse() = this
 
     override fun List<String>.solvePartOne(): Long {
         val forwardSum = sumOf(Regex("""$FORWARD (\d+)"""))

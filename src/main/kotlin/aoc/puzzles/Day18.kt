@@ -15,7 +15,7 @@ object Day18 : Puzzle<List<Node>, Int>(18) {
     private const val OPENING_CHAR = '['
     private const val SEPARATOR = ','
     private const val CLOSING_CHAR = ']'
-    override fun Sequence<String>.parse(): List<Node> = toList().map { StringReader(it).parse() }
+    override fun List<String>.parse(): List<Node> = map { StringReader(it).parse() }
 
     private fun Reader.parse(): Node {
         val char = requireNotNull(nextChar)

@@ -8,7 +8,7 @@ import java.util.*
  * @author Kris | 15/12/2021
  */
 object Day15 : Puzzle<Cavern, Int>(15) {
-    override fun Sequence<String>.parse(): Cavern = toList().map { row -> row.map(Character::getNumericValue) }
+    override fun List<String>.parse(): Cavern = map { row -> row.map(Character::getNumericValue) }
     private const val MAX_RISK = 9
     private val EXPAND_RANGE = 1 until 5
     private val Cavern.dimensions: Dimensions get() = size to first().size

@@ -16,7 +16,7 @@ object Day16 : Puzzle<Packet, Long>(16) {
     private const val SUB_PACKETS_BITS_SIZE = 15
     private const val SUB_PACKETS_COUNT_SIZE = 11
     private const val LITERAL_PACKET_PORTION_SIZE = 4
-    override fun Sequence<String>.parse(): Packet = ReadOnlyBitBuffer(HexFormat.of().parseHex(single())).decodePacket()
+    override fun List<String>.parse(): Packet = ReadOnlyBitBuffer(HexFormat.of().parseHex(single())).decodePacket()
 
     private fun ReadOnlyBitBuffer.decodePacket(): Packet {
         val version = readBits(VERSION_SIZE)

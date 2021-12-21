@@ -10,7 +10,7 @@ import kotlin.math.sign
 object Day17 : Puzzle<TargetArea, Int>(17) {
     private val TARGET_AREA_REGEX = Regex("""target area: x=(-?\d+)\.{2}(-?\d+), y=(-?\d+)\.{2}(-?\d+)""")
 
-    override fun Sequence<String>.parse(): TargetArea =
+    override fun List<String>.parse(): TargetArea =
         requireNotNull(TARGET_AREA_REGEX.matchEntire(single()))
             .groupValues
             .takeLast(4)

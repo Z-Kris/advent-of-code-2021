@@ -8,7 +8,7 @@ import aoc.*
 object Day14 : Puzzle<PolymerizationEquipment, Long>(14) {
     private val INSTRUCTION_REGEX = Regex("([A-Z]{2}) -> ([A-Z])")
 
-    override fun Sequence<String>.parse(): PolymerizationEquipment = with(toList()) { PolymerizationEquipment(first(), drop(2).toInstructions()) }
+    override fun List<String>.parse(): PolymerizationEquipment = PolymerizationEquipment(first(), drop(2).toInstructions())
 
     private fun List<String>.toInstructions() = map {
         val (string, result) = requireNotNull(INSTRUCTION_REGEX.find(it)?.destructured)

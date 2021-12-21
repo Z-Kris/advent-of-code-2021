@@ -9,10 +9,12 @@ object Day4 : Puzzle<Bingo, Long>(4) {
     private fun List<List<String>>.getBingoBoards() = map { it.convertToIntList() }.map(::BingoBoard)
     private fun List<String>.convertToIntList() = flatMap(String::lines).joinToString(separator = " ").trim().split(Regex("""\s+""")).map(String::toInt)
 
-    override fun Sequence<String>.parse(): Bingo = with(toMutableList().apply { removeIf(String::isEmpty) }) {
-        val winningNumbers = removeFirst().split(',').map(String::toInt)
-        val bingoBoards = chunked(DIMENSION).getBingoBoards()
-        Bingo(winningNumbers.withIndex().associate { it.value to winningNumbers.subList(0, it.index + 1).toSet() }, bingoBoards)
+    override fun List<String>.parse(): Bingo {
+        val list = toMutableList()
+        list.removeAll(String::isEmpty)
+        val winningNumbers = list.removeFirst().split(',').map(String::toInt)
+        val bingoBoards = list.chunked(DIMENSION).getBingoBoards()
+        return Bingo(winningNumbers.withIndex().associate { it.value to winningNumbers.subList(0, it.index + 1).toSet() }, bingoBoards)
     }
 
     override fun Bingo.solvePartOne(): Long = getWinningBoards().first().getScore()

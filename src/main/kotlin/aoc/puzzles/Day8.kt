@@ -9,13 +9,11 @@ import kotlin.reflect.KProperty
  * @author Kris | 08/12/2021
  */
 object Day8 : Puzzle<List<SegmentDisplay>, Int>(8) {
-    override fun Sequence<String>.parse(): List<SegmentDisplay> {
-        return toList().map { line ->
-            val (numbers, codes) = line.split(" | ")
-            val segment = numbers.split(' ').map(::Digit)
-            val digits = codes.split(' ').map(::Digit)
-            SegmentDisplay(Segment(segment), digits)
-        }
+    override fun List<String>.parse(): List<SegmentDisplay> = map { line ->
+        val (numbers, codes) = line.split(" | ")
+        val segment = numbers.split(' ').map(::Digit)
+        val digits = codes.split(' ').map(::Digit)
+        SegmentDisplay(Segment(segment), digits)
     }
 
     override fun List<SegmentDisplay>.solvePartOne(): Int = sumOf { code -> with(code.segment) { code.digits.count { digits -> digits.isPartOneDigit() } } }

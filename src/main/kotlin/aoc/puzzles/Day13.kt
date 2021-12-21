@@ -12,8 +12,8 @@ object Day13 : Puzzle<InstructionManual, Origami>(13) {
     private val POINT_REGEX = Regex("""(\d+),(\d+)""")
     private val INSTRUCTION_REGEX = Regex("""fold along ([xy])=(\d+)""")
 
-    override fun Sequence<String>.parse(): InstructionManual =
-        toList().let { lines -> InstructionManual(buildList { lines.forEach { addPoint(it) } }, buildList { lines.forEach { addInstruction(it) } }) }
+    override fun List<String>.parse(): InstructionManual =
+        let { lines -> InstructionManual(buildList { lines.forEach { addPoint(it) } }, buildList { lines.forEach { addInstruction(it) } }) }
 
     private fun MutableList<Point>.addPoint(line: String) {
         val (x, y) = POINT_REGEX.find(line)?.destructured ?: return

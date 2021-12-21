@@ -7,11 +7,10 @@ import aoc.Point
  */
 object Day11 : Puzzle<OctupusGrid, Int>(11) {
     private const val PART_1_REPETITIONS = 100
-    override fun Sequence<String>.parse(): OctupusGrid {
-        val list = toList()
-        val elements = list.flatMap { it.map(Character::getNumericValue) }
-        require(list.size == elements.size / list.size)
-        return OctupusGrid(elements, list.size)
+    override fun List<String>.parse(): OctupusGrid {
+        val elements = flatMap { it.map(Character::getNumericValue) }
+        require(size == elements.size / size)
+        return OctupusGrid(elements, size)
     }
 
     override fun OctupusGrid.solvePartOne(): Int = DumboOctupuses(list.toMutableList(), dimension).sumOfRepetitions(PART_1_REPETITIONS)
