@@ -25,7 +25,7 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
                 require(put(id, pos) == null) { "Overlapping player" }
             }
         }
-        return positions.toSortedMap().values.toList()
+        return positions.toSortedMap().values
     }
 
     private fun DiceStartingPositions.toDiracDiceGame(): DiracDiceGame {
@@ -76,7 +76,7 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
 
 private typealias Score = Pair<Long, Long>
 private typealias DiceGameCache = MutableMap<DiracDiceGame, Score>
-private typealias DiceStartingPositions = List<Int>
+private typealias DiceStartingPositions = Collection<Int>
 
 private data class DiracDiceGame(val firstPlayer: Player, val secondPlayer: Player)
 private data class Player(val position: Int, val score: Int = 0)
