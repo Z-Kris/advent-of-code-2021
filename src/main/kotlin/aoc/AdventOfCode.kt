@@ -2,26 +2,7 @@
 
 package aoc
 
-import aoc.day1.Day1
-import aoc.day10.Day10
-import aoc.day11.Day11
-import aoc.day12.Day12
-import aoc.day13.Day13
-import aoc.day14.Day14
-import aoc.day15.Day15
-import aoc.day16.Day16
-import aoc.day17.Day17
-import aoc.day18.Day18
-import aoc.day19.Day19
-import aoc.day2.Day2
-import aoc.day20.Day20
-import aoc.day3.Day3
-import aoc.day4.Day4
-import aoc.day5.Day5
-import aoc.day6.Day6
-import aoc.day7.Day7
-import aoc.day8.Day8
-import aoc.day9.Day9
+import aoc.puzzles.Puzzle
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -29,31 +10,11 @@ import kotlin.time.measureTimedValue
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = listOf(
-    Day1,
-    Day2,
-    Day3,
-    Day4,
-    Day5,
-    Day6,
-    Day7,
-    Day8,
-    Day9,
-    Day10,
-    Day11,
-    Day12,
-    Day13,
-    Day14,
-    Day15,
-    Day16,
-    Day17,
-    Day18,
-    Day19,
-    Day20
-)
+private val puzzles = sealedClassInstances<Puzzle<*, *>>()
+private val List<Puzzle<*, *>>.lastPuzzle get() = maxByOrNull { it.day } ?: error("No puzzles found.")
 
 @ExperimentalTime
-private fun main() = solve(puzzles.last())
+private fun main() = solve(puzzles.lastPuzzle)
 
 @ExperimentalTime
 private fun <T, R> solve(puzzle: Puzzle<T, R>) = with(puzzle) {

@@ -84,3 +84,6 @@ inline fun SortedList<Int>.meanValues(): List<Int> = with(sum() / size.toDouble(
 
 inline fun <reified T> singleSealedInstance(function: (T) -> Boolean): T =
     T::class.sealedSubclasses.firstNotNullOf { subClass -> subClass.objectInstance?.let { if (function(it)) it else null } }
+
+@Suppress("ConvertLambdaToReference")
+inline fun <reified T> sealedClassInstances(): List<T> = T::class.sealedSubclasses.mapNotNull { it.objectInstance }
