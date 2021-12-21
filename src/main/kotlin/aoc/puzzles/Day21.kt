@@ -30,7 +30,7 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
 
     private fun DiceStartingPositions.toDiracDiceGame(): DiracDiceGame {
         val (playerA, playerB) = map(::Player)
-        return DiracDiceGame(playerA, playerB)
+        return playerA play playerB
     }
 
     override fun DiceStartingPositions.solvePartOne(): Long {
@@ -61,13 +61,17 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
 
     private fun DiracDiceGame.getScore(cache: DiceGameCache = mutableMapOf()): Score = cache.getOrPut(this) { roll(cache) }
 
-    private fun DiracDiceGame.roll(cache: DiceGameCache): Score = QUANTUM_ROLL_POSSIBILITIES.fold(INITIAL_SCORE) { acc, roll ->
-        val firstPlayer = firstPlayer.advance(roll)
-        if (firstPlayer.score >= QUANTUM_GAME_WIN_THRESHOLD) return@fold acc.first.inc() to acc.second
-        val nextGame = DiracDiceGame(secondPlayer, firstPlayer)
-        val (first, second) = nextGame.getScore(cache)
-        acc.first.plus(second) to acc.second.plus(first)
+    private fun DiracDiceGame.roll(cache: DiceGameCache): Score = QUANTUM_ROLL_POSSIBILITIES.fold(INITIAL_SCORE) { acc, roll -> fold(acc, roll, cache) }
+    private fun DiracDiceGame.fold(acc: Score, roll: Int, cache: DiceGameCache): Score = firstPlayer.advance(roll).let { firstPlayer ->
+        if (firstPlayer.score >= QUANTUM_GAME_WIN_THRESHOLD) acc.incrementFirst()
+        else acc.plus(secondPlayer.play(firstPlayer).getInvertedScore(cache))
     }
+
+    private fun DiracDiceGame.getInvertedScore(cache: DiceGameCache): Score = getScore(cache).inv()
+    private fun Score.inv() = second to first
+    private fun Score.incrementFirst() = first.inc() to second
+    private operator fun Score.plus(other: Score) = first.plus(other.first) to second.plus(other.second)
+    private infix fun Player.play(other: Player) = DiracDiceGame(this, other)
 }
 
 private typealias Score = Pair<Long, Long>
