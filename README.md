@@ -28,3 +28,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 18: Snailfish](src/main/kotlin/aoc/puzzles/Day18.kt)               |    🌟    |    🌟    |
 | ✔ [Day 19: Beacon Scanner](src/main/kotlin/aoc/puzzles/Day19.kt)          |    🌟    |    🌟    |
 | ✔ [Day 20: Trench Map](src/main/kotlin/aoc/puzzles/Day20.kt)              |    🌟    |    🌟    |
+| ✔ [Day 21: Dirac Dice](src/main/kotlin/aoc/puzzles/Day21.kt)              |    🌟    |    🌟    |
