@@ -86,4 +86,4 @@ inline fun SortedList<Int>.meanValues(): List<Int> = with(sum() / size.toDouble(
 inline fun <reified T> singleSealedInstance(function: (T) -> Boolean): T =
     T::class.sealedSubclasses.firstNotNullOf { subClass -> subClass.objectInstance?.let { if (function(it)) it else null } }
 
-inline fun <reified T : Any> sealedClassInstances(): List<T> = T::class.sealedSubclasses.mapNotNull(KClass<out T>::objectInstance)
+inline fun <reified T : Any> sealedClassObjectInstances(): List<T> = T::class.sealedSubclasses.mapNotNull(KClass<out T>::objectInstance)

@@ -10,7 +10,7 @@ import kotlin.time.measureTimedValue
 /**
  * @author Kris | 05/12/2021
  */
-private val puzzles = sealedClassInstances<Puzzle<*, *>>()
+private val puzzles = sealedClassObjectInstances<Puzzle<*, *>>()
 private val List<Puzzle<*, *>>.lastPuzzle get() = maxByOrNull { it.day } ?: error("No puzzles found.")
 
 @ExperimentalTime
