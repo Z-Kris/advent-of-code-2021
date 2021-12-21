@@ -18,11 +18,12 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
         QUANTUM_ROLLS.flatMap { first -> QUANTUM_ROLLS.flatMap { second -> QUANTUM_ROLLS.map { third -> first + second + third } } }
 
     override fun List<String>.parse(): DiceStartingPositions {
-        val positions = mutableMapOf<Int, Int>()
-        for (line in this) {
-            val match = STARTING_POSITION_REGEX.matchEntire(line) ?: error("Corrupted line: $line")
-            val (id, pos) = match.groupValues?.drop(1).map(String::toInt)
-            require(positions.put(id, pos) == null) { "Overlapping player" }
+        val positions = buildMap {
+            this@parse.forEach { line ->
+                val match = STARTING_POSITION_REGEX.matchEntire(line) ?: error("Corrupted line: $line")
+                val (id, pos) = match.groupValues?.drop(1).map(String::toInt)
+                require(put(id, pos) == null) { "Overlapping player" }
+            }
         }
         return positions.toSortedMap().values.toList()
     }
