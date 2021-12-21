@@ -67,10 +67,9 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
 
     private fun DiracDiceGame.fold(acc: Score, roll: Int, cache: DiceGameCache): Score = firstPlayer.advance(roll).let { firstPlayer ->
         if (firstPlayer.score >= QUANTUM_GAME_WIN_THRESHOLD) acc.incrementFirst()
-        else acc plus secondPlayer.play(firstPlayer).getInvertedScore(cache)
+        else acc plus secondPlayer.play(firstPlayer).getScore(cache).inv()
     }
 
-    private fun DiracDiceGame.getInvertedScore(cache: DiceGameCache): Score = getScore(cache).inv()
     private fun Score.inv() = second to first
     private fun Score.incrementFirst() = first.inc() to second
     private infix operator fun Score.plus(other: Score) = first.plus(other.first) to second.plus(other.second)
