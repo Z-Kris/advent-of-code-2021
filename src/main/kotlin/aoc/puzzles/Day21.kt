@@ -34,9 +34,8 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
     }
 
     override fun DiceStartingPositions.solvePartOne(): Long {
-        val game = toDiracDiceGame()
         val die = Die()
-        val loser = game.findLoser(die)
+        val loser = toDiracDiceGame().findLoser(die)
         return loser.score.toLong() * die.rollCount
     }
 
@@ -56,8 +55,7 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
     }
 
     override fun DiceStartingPositions.solvePartTwo(): Long {
-        val game = toDiracDiceGame()
-        val (firstWins, secondWins) = game.getScore()
+        val (firstWins, secondWins) = toDiracDiceGame().getScore()
         return max(firstWins, secondWins)
     }
 
