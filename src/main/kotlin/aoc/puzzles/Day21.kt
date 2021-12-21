@@ -27,14 +27,16 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
         return positions.toSortedMap().values.toList()
     }
 
-    private fun DiceStartingPositions.toPlayers(): List<Player> = map(::Player)
+    private fun DiceStartingPositions.toDiracDiceGame(): DiracDiceGame {
+        val (playerA, playerB) = map(::Player)
+        return DiracDiceGame(playerA, playerB)
+    }
 
     override fun DiceStartingPositions.solvePartOne(): Long {
-        val (first, second) = toPlayers()
+        val game = toDiracDiceGame()
         val die = Die()
-        val loser = DiracDiceGame(first, second).findLoser(die)
-        val rolls = die.rollCount
-        return loser.score.toLong() * rolls
+        val loser = game.findLoser(die)
+        return loser.score.toLong() * die.rollCount
     }
 
     private tailrec fun DiracDiceGame.findLoser(die: Die): Player {
@@ -53,8 +55,7 @@ object Day21 : Puzzle<DiceStartingPositions, Long>(21) {
     }
 
     override fun DiceStartingPositions.solvePartTwo(): Long {
-        val (first, second) = toPlayers()
-        val game = DiracDiceGame(first, second)
+        val game = toDiracDiceGame()
         val (firstWins, secondWins) = game.getScore()
         return max(firstWins, secondWins)
     }
