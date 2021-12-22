@@ -3,8 +3,6 @@ package aoc.puzzles
 import aoc.Vec3i
 import aoc.component6
 import aoc.inv
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.reflect.KProperty1
 
 /**
@@ -51,10 +49,12 @@ private typealias Vec3iProperty = KProperty1<Vec3i, Int>
 data class Cuboid(val start: Vec3i, val end: Vec3i) {
     private val isEmpty get() = start.x > end.x || start.y > end.y || start.z > end.z
     val size get() = (end.x.toLong() - start.x) * (end.y - start.y) * (end.z - start.z)
+    private inline fun Vec3i.slice(property: Vec3iProperty, other: Vec3i, selector: (Int, Int) -> Int) =
+        copy(property, selector(property.get(other), property.get(this)))
 
     private fun slice(property: Vec3iProperty, other: Vec3i): Pair<Cuboid, Cuboid> {
-        val slice = Cuboid(start, end.copy(property, min(property.get(other), property.get(end))))
-        val remaining = Cuboid(start.copy(property, max(property.get(other), property.get(start))), end)
+        val slice = Cuboid(start, end.slice(property, other, Math::min))
+        val remaining = Cuboid(start.slice(property, other, Math::max), end)
         return slice to remaining
     }
 
