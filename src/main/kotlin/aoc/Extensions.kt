@@ -16,12 +16,16 @@ inline fun <T> T.chainRepeat(times: Int, action: (Int) -> Unit): T {
 inline val <T> T.self: T get() = this
 inline val Boolean.toInt get() = if (this) 1 else 0
 
+inline operator fun <T> List<T>.component6(): T = get(5)
+
 inline operator fun String.minus(regex: Regex) = replace(regex, "")
 
 inline fun <T> List<T>.concatenate() = joinToString(separator = "")
 
 inline fun <K> Map<K, Long>.getOrZero(key: K) = getOrDefault(key, 0)
 inline fun <K> Map<K, Int>.getOrZero(key: K) = getOrDefault(key, 0)
+
+inline val <A, B> Pair<A, B>.inv: Pair<B, A> get() = second to first
 
 inline fun <T> Iterable<T>.forEachFiltered(filter: (T) -> Boolean, action: (T) -> Unit) = forEach { element -> if (filter(element)) action(element) }
 
