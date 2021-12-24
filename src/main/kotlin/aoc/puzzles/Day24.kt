@@ -96,10 +96,10 @@ interface AluInstruction<T> {
     val operation: AluOperation
     val leftOperand: Vec4iField
     val rightOperand: T
-    fun getRightHandValue(vector: Vec4i): Int
+    fun Vec4i.getRightHandValue(): Int
     fun getResult(vector: Vec4i): Vec4i {
-        val value = leftOperand.getValue(vector, leftOperand)
-        val result = operation.invoke(value, getRightHandValue(vector))
+        val value = leftOperand.get(vector)
+        val result = operation.invoke(value, vector.getRightHandValue())
         return vector.copy(leftOperand, result)
     }
 }
@@ -109,7 +109,7 @@ data class AluLiteralInstruction(
     override val leftOperand: Vec4iField,
     override val rightOperand: Int
 ) : AluInstruction<Int> {
-    override fun getRightHandValue(vector: Vec4i): Int = rightOperand
+    override fun Vec4i.getRightHandValue(): Int = rightOperand
 }
 
 data class AluFieldInstruction(
@@ -117,7 +117,7 @@ data class AluFieldInstruction(
     override val leftOperand: Vec4iField,
     override val rightOperand: Vec4iField
 ) : AluInstruction<Vec4iField> {
-    override fun getRightHandValue(vector: Vec4i): Int = rightOperand.getValue(vector, rightOperand)
+    override fun Vec4i.getRightHandValue(): Int = rightOperand.get(this)
 }
 
 @Suppress("unused")
