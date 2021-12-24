@@ -30,3 +30,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 20: Trench Map](src/main/kotlin/aoc/puzzles/Day20.kt)              |    🌟    |    🌟    |
 | ✔ [Day 21: Dirac Dice](src/main/kotlin/aoc/puzzles/Day21.kt)              |    🌟    |    🌟    |
 | ✔ [Day 22: Reactor Reboot](src/main/kotlin/aoc/puzzles/Day22.kt)          |    🌟    |    🌟    |
+| ✔ [Day 23: Amphipod](src/main/kotlin/aoc/puzzles/Day23.kt)                |    🌟    |    🌟    |
