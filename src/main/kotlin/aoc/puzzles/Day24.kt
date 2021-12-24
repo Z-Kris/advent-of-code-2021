@@ -63,11 +63,9 @@ object Day24 : Puzzle<List<AluInstructions>, Long>(24) {
         if (digitIndex == DIGITS) {
             return if (vector.z == 0) 0 else null
         }
-        /* Check if the node has already been visited. */
-        if (vector.visitIndex(digitIndex) in visited) return null
+        /* Check if the node has already been visited, if not, mark it visited. */
+        if (!visited.add(vector.visitIndex(digitIndex))) return null
         val instructions = get(digitIndex)
-        /* Mark the node visited. */
-        visited += vector.visitIndex(digitIndex)
 
         return digitsRange.firstNotNullOfOrNull { digit ->
             val nextVector = instructions.fold(vector.copy(w = digit)) ?: return@firstNotNullOfOrNull null
