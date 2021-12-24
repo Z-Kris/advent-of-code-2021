@@ -12,10 +12,13 @@ object Day24 : Puzzle<List<AluInstructions>, Long>(24) {
     private val DIGITS_RANGE = 1..9
     private val DECREMENTING_DIGITS_RANGE = DIGITS_RANGE.reversed()
     private const val DIGITS = 14
+
     /* Build a list of powers-of-10 values, so [1, 10, 100, 1000, etc] through string manipulation. */
-    private val POWERS_OF_10_REVERSED = List(DIGITS) { zeroCount -> "1${"0".repeat(zeroCount)}".toLong() }.reversed()
+    private val POWERS_OF_10_REVERSED = List(DIGITS) { zeroCount -> "1${ "0".repeat(zeroCount)}".toLong() }.reversed()
+
     /* All input seems to affect the 'w' variable of the vec4. */
     private const val INPUT_STRING = "inp w"
+
     /* Exclude inp instruction as we handle that separately, as a line break. */
     private val INSTRUCTION_REGEX = Regex("""(add|mul|div|mod|eql) ([xyz]) (-?\d+|[xyzw])""")
 
