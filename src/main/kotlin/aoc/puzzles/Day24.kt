@@ -59,14 +59,14 @@ object Day24 : Puzzle<List<AluInstructions>, Long>(24) {
         vector: Vec4i = Vec4i.ZERO,
         visited: MutableSet<Int> = mutableSetOf(),
     ): Long? {
-        /* Check for arrival. */
+        /* Check for arrival - the z variable must be zero by the time we reach the final digit. */
         if (digitIndex == DIGITS) {
             return if (vector.z == 0) 0 else null
         }
         /* Check if the node has already been visited, if not, mark it visited. */
         if (!visited.add(vector.visitIndex(digitIndex))) return null
-        val instructions = get(digitIndex)
 
+        val instructions = get(digitIndex)
         return digitsRange.firstNotNullOfOrNull { digit ->
             val nextVector = instructions.fold(vector.copy(w = digit)) ?: return@firstNotNullOfOrNull null
             val trailingDigits = depthFirstSearch(digitsRange, digitIndex.inc(), nextVector, visited) ?: return@firstNotNullOfOrNull null
