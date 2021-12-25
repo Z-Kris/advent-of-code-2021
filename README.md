@@ -32,3 +32,4 @@ Solutions for [Advent of Code 2021][aoc]. This project uses Kotlin.
 | ✔ [Day 22: Reactor Reboot](src/main/kotlin/aoc/puzzles/Day22.kt)          |    🌟    |    🌟    |
 | ✔ [Day 23: Amphipod](src/main/kotlin/aoc/puzzles/Day23.kt)                |    🌟    |    🌟    |
 | ✔ [Day 24: Arithmetic Logic Unit](src/main/kotlin/aoc/puzzles/Day24.kt)   |    🌟    |    🌟    |
+| ✔ [Day 25: Sea Cucumber](src/main/kotlin/aoc/puzzles/Day25.kt)            |    🌟    |    🌟    |
